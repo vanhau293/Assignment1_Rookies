@@ -1,0 +1,31 @@
+package com.example.demo.data.entities;
+
+import java.util.Collection;
+
+import javax.persistence.*;
+
+public class Employee {
+	@Id
+    @Basic(optional = false)
+    @Column(name = "employee_id")
+    private Integer employeeId;
+    @Basic(optional = false)
+    @Column(name = "name")
+    private String name;
+    @Column(name = "gender")
+    private String gender;
+    @Column(name = "address")
+    private String address;
+    @Basic(optional = false)
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    @Column(name = "email")
+    private String email;
+    @JoinColumn(name = "username", referencedColumnName = "username")
+    @OneToOne
+    private User username;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employeeId")
+    private Collection<GoodsReceived> goodsReceivedCollection;
+    @OneToMany(mappedBy = "employeeId")
+    private Collection<Order1> order1Collection;
+}

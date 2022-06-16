@@ -1,0 +1,43 @@
+package com.example.demo.data.entities;
+
+import java.util.Collection;
+
+import javax.persistence.*;
+
+import lombok.Getter;
+import lombok.Setter;
+@Entity
+@Table(name = "employee")
+@Getter
+@Setter
+@NamedQueries({
+    @NamedQuery(name = "GoodsReceived.findAll", query = "SELECT g FROM GoodsReceived g")
+    , @NamedQuery(name = "GoodsReceived.findByReceivedId", query = "SELECT g FROM GoodsReceived g WHERE g.receivedId = :receivedId")
+    , @NamedQuery(name = "GoodsReceived.findByCreatedDate", query = "SELECT g FROM GoodsReceived g WHERE g.createdDate = :createdDate")
+    , @NamedQuery(name = "GoodsReceived.findByTotalCash", query = "SELECT g FROM GoodsReceived g WHERE g.totalCash = :totalCash")})
+
+public class Employee {
+	@Id
+    @Basic(optional = false)
+    @Column(name = "employee_id")
+    private Integer employeeId;
+    @Basic(optional = false)
+    @Column(name = "name")
+    private String name;
+    @Column(name = "gender")
+    private String gender;
+    @Column(name = "address")
+    private String address;
+    @Basic(optional = false)
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    @Column(name = "email")
+    private String email;
+    @JoinColumn(name = "username", referencedColumnName = "username")
+    @OneToOne
+    private User username;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employeeId")
+    private Collection<GoodsReceived> goodsReceivedCollection;
+    @OneToMany(mappedBy = "employeeId")
+    private Collection<Order> order1Collection;
+}

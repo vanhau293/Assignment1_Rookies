@@ -1,0 +1,32 @@
+package com.example.demo.data.entities;
+
+import javax.persistence.*;
+
+import lombok.Getter;
+import lombok.Setter;
+@Entity
+@Table(name = "order_detail")
+@Getter
+@Setter
+@NamedQueries({
+    @NamedQuery(name = "OrderDetail.findAll", query = "SELECT o FROM OrderDetail o")
+    , @NamedQuery(name = "OrderDetail.findByOrderId", query = "SELECT o FROM OrderDetail o WHERE o.orderDetailPK.orderId = :orderId")
+    , @NamedQuery(name = "OrderDetail.findByBookId", query = "SELECT o FROM OrderDetail o WHERE o.orderDetailPK.bookId = :bookId")
+    , @NamedQuery(name = "OrderDetail.findByQuantity", query = "SELECT o FROM OrderDetail o WHERE o.quantity = :quantity")
+    , @NamedQuery(name = "OrderDetail.findByUnitPrice", query = "SELECT o FROM OrderDetail o WHERE o.unitPrice = :unitPrice")})
+public class OrderDetail {
+	@EmbeddedId
+    protected OrderDetailPK orderDetailPK;
+    @Basic(optional = false)
+    @Column(name = "quantity")
+    private int quantity;
+    @Basic(optional = false)
+    @Column(name = "unit_price")
+    private long unitPrice;
+    @JoinColumn(name = "book_id", referencedColumnName = "book_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Book book;
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Order order;
+}

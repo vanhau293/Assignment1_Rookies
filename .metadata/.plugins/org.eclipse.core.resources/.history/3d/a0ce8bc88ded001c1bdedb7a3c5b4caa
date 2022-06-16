@@ -1,0 +1,43 @@
+package com.example.demo.data.entities;
+
+import java.util.Collection;
+import java.util.Date;
+
+import javax.persistence.*;
+
+import lombok.Getter;
+import lombok.Setter;
+@Entity
+@Table(name = "order")
+@Getter
+@Setter
+@NamedQueries({
+    @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order1 o")
+    , @NamedQuery(name = "Order1.findByOrderId", query = "SELECT o FROM Order1 o WHERE o.orderId = :orderId")
+    , @NamedQuery(name = "Order1.findByCreatedDate", query = "SELECT o FROM Order1 o WHERE o.createdDate = :createdDate")
+    , @NamedQuery(name = "Order1.findByTotalCash", query = "SELECT o FROM Order1 o WHERE o.totalCash = :totalCash")
+    , @NamedQuery(name = "Order1.findByConfirmed", query = "SELECT o FROM Order1 o WHERE o.confirmed = :confirmed")})
+public class Order {
+	@Id
+    @Basic(optional = false)
+    @Column(name = "order_id")
+    private Integer orderId;
+    @Basic(optional = false)
+    @Column(name = "created_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
+    @Basic(optional = false)
+    @Column(name = "total_cash")
+    private long totalCash;
+    @Basic(optional = false)
+    @Column(name = "confirmed")
+    private boolean confirmed;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order1")
+    private Collection<OrderDetail> orderDetailCollection;
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
+    @ManyToOne(optional = false)
+    private Customer customerId;
+    @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
+    @ManyToOne
+    private Employee employeeId;
+}

@@ -223,8 +223,12 @@
 <uri name="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/configuration/org.eclipse.osgi/858/0/.cp/xsd/ws-securitypolicy-1.2.xsd"/>
 <uri name="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200802" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/configuration/org.eclipse.osgi/858/0/.cp/xsd/ws-securitypolicy.xsd"/>
 <uri name="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/configuration/org.eclipse.osgi/858/0/.cp/xsd/xmldsig-core-schema.xsd"/>
-<uri name="http://www.w3.org/2001/XMLSchema" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/configuration/org.eclipse.osgi/910/0/.cp/cache/www.w3.org/2001/XMLSchema.xsd"/>
-<system systemId="http://www.w3.org/2001/xml.xsd" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/configuration/org.eclipse.osgi/910/0/.cp/cache/www.w3.org/2001/xml.xsd"/>
+<uri name="http://www.w3.org/2001/XMLSchema" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/configuration/org.eclipse.osgi/1148/0/.cp/cache/www.w3.org/2001/XMLSchema.xsd"/>
+<system systemId="http://www.w3.org/2001/xml.xsd" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/configuration/org.eclipse.osgi/1148/0/.cp/cache/www.w3.org/2001/xml.xsd"/>
 <uri name="http://www.w3.org/2001/XInclude" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/configuration/org.eclipse.osgi/892/0/.cp/xslt-schemas/xinclude.xsd"/>
 <public publicId="-//LOG4J//DTD LOG4J//EN" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/configuration/org.eclipse.osgi/1004/0/.cp/dtd/log4j-1.2.dtd"/>
+<public publicId="-//Hibernate/Hibernate Mapping DTD 3.0//EN" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/../../../.p2/pool/plugins/org.hibernate.eclipse.mapper_5.4.16.v20220207-0815/dtd/hibernate-mapping-3.0.dtd"/>
+<public publicId="-//Hibernate/Hibernate Configuration DTD 3.0//EN" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/../../../.p2/pool/plugins/org.hibernate.eclipse.mapper_5.4.16.v20220207-0815/dtd/hibernate-configuration-3.0.dtd"/>
+<public publicId="-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/../../../.p2/pool/plugins/org.hibernate.eclipse.mapper_5.4.16.v20220207-0815/dtd/hibernate-reverse-engineering-3.0.dtd"/>
+<public publicId="-//Red Hat, Inc.//DTD Meta 1.0//EN" uri="file:///C:/Users/CVanHau/eclipse/jee-2022-03/eclipse/../../../.p2/pool/plugins/org.jboss.tools.common.model_3.17.200.v20220214-1047/schema/meta.dtd"/>
 </catalog>

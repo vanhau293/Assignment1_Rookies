@@ -1,0 +1,12 @@
+package com.example.demo.data.entities;
+
+import javax.persistence.*;
+
+public class CartPK {
+	@Basic(optional = false)
+    @Column(name = "customer_id")
+    private int customerId;
+    @Basic(optional = false)
+    @Column(name = "book_id")
+    private int bookId;
+}

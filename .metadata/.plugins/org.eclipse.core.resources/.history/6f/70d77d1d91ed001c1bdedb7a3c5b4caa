@@ -1,0 +1,49 @@
+package com.example.demo.data.entities;
+
+import javax.persistence.*;
+
+import lombok.Getter;
+import lombok.Setter;
+@Entity
+@Table(name = "received_detail")
+@Getter
+@Setter
+@NamedQueries({
+    @NamedQuery(name = "ReceivedDetail.findAll", query = "SELECT r FROM ReceivedDetail r")
+    , @NamedQuery(name = "ReceivedDetail.findByReceivedId", query = "SELECT r FROM ReceivedDetail r WHERE r.receivedDetailPK.receivedId = :receivedId")
+    , @NamedQuery(name = "ReceivedDetail.findByBookId", query = "SELECT r FROM ReceivedDetail r WHERE r.receivedDetailPK.bookId = :bookId")
+    , @NamedQuery(name = "ReceivedDetail.findByQuantity", query = "SELECT r FROM ReceivedDetail r WHERE r.quantity = :quantity")
+    , @NamedQuery(name = "ReceivedDetail.findByUnitPrice", query = "SELECT r FROM ReceivedDetail r WHERE r.unitPrice = :unitPrice")})
+public class ReceivedDetail {
+	@EmbeddedId
+    protected ReceivedDetailPK receivedDetailPK;
+    @Basic(optional = false)
+    @Column(name = "quantity")
+    private int quantity;
+    @Basic(optional = false)
+    @Column(name = "unit_price")
+    private long unitPrice;
+    @JoinColumn(name = "book_id", referencedColumnName = "book_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Book book;
+    @JoinColumn(name = "received_id", referencedColumnName = "received_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private GoodsReceived goodsReceived;
+    
+    public ReceivedDetail() {
+    }
+
+    public ReceivedDetail(ReceivedDetailPK receivedDetailPK) {
+        this.receivedDetailPK = receivedDetailPK;
+    }
+
+    public ReceivedDetail(ReceivedDetailPK receivedDetailPK, int quantity, long unitPrice) {
+        this.receivedDetailPK = receivedDetailPK;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+
+    public ReceivedDetail(int receivedId, int bookId) {
+        this.receivedDetailPK = new ReceivedDetailPK(receivedId, bookId);
+    }
+}
