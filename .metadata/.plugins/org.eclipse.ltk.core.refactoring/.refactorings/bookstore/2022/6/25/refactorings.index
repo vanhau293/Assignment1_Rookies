@@ -5,3 +5,26 @@
 1655301056590	Move 'repositories' to 'data'
 1655301711075	Rename resource 'requests'
 1655378311336	Delete element
+1655458730073	Rename type 'Order'
+1655458792115	Rename type 'OrderDetail'
+1655459318522	Rename type 'OrderDetailPK'
+1655460671542	Rename type 'GoodsReceived'
+1655460801468	Rename field 'receivedId'
+1655460972896	Rename type 'ReceivedDetail'
+1655461276519	Rename type 'ReceivedDetailPK'
+1655462115096	Rename type 'Rating'
+1655462336983	Rename type 'RatingPK'
+1655463493508	Rename type 'User'
+1655481841030	Rename type 'Author'
+1655482066574	Rename type 'Book'
+1655482708501	Rename type 'Accounts'
+1655482839575	Rename type 'Account'
+1655482981831	Rename type 'Category'
+1655483069125	Rename type 'Customer'
+1655483180059	Rename type 'Employee'
+1655483696252	Rename type 'Role'
+1655483770209	Delete element
+1655483786330	Rename type 'WarehouseReceipt'
+1655486767753	Delete element
+1655486795661	Delete element
+1655486801631	Delete element

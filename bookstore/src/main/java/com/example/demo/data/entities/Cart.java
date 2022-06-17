@@ -14,24 +14,23 @@ import lombok.Setter;
 public class Cart {
 	@EmbeddedId
     protected CartPK cartPK;
-    @Basic(optional = false)
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private int quantity;
-    @JoinColumn(name = "book_id", referencedColumnName = "book_id", insertable = false, updatable = false)
+    @JoinColumn(name = "book_id", referencedColumnName = "book_id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Book book;
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", insertable = false, updatable = false)
+    private Books books;
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Customer customer;
+    private Customers customers;
 	public Cart() {
 		super();
 	}
-	public Cart(CartPK cartPK, int quantity, Book book, Customer customer) {
+	public Cart(CartPK cartPK, int quantity, Books books, Customers customer) {
 		super();
 		this.cartPK = cartPK;
 		this.quantity = quantity;
-		this.book = book;
-		this.customer = customer;
+		this.books = books;
+		this.customers = customer;
 	}
 	public Cart(CartPK cartPK) {
 		super();

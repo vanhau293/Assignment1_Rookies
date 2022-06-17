@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="javax.persistence.FetchType"/>
-    <fullyQualifiedTypeName name="java.io.Serializable"/>
     <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="javax.persistence.SecondaryTable"/>
     <fullyQualifiedTypeName name="javax.persistence.EmbeddedId"/>
@@ -18,10 +16,13 @@
     <fullyQualifiedTypeName name="javax.persistence.ManyToOne"/>
     <fullyQualifiedTypeName name="java.lang.String"/>
     <fullyQualifiedTypeName name="javax.persistence.Entity"/>
-    <fullyQualifiedTypeName name="javax.persistence.Table"/>
     <fullyQualifiedTypeName name="com.example.demo.data.entities.Employee"/>
     <fullyQualifiedTypeName name="com.example.demo.data.entities.Category"/>
-    <fullyQualifiedTypeName name="javax.persistence.GeneratedValue"/>
-    <fullyQualifiedTypeName name="lombok.Setter"/>
+    <fullyQualifiedTypeName name="java.io.Serializable"/>
+    <fullyQualifiedTypeName name="javax.persistence.FetchType"/>
+    <fullyQualifiedTypeName name="javax.persistence.Table"/>
     <fullyQualifiedTypeName name="lombok.Getter"/>
+    <fullyQualifiedTypeName name="lombok.Setter"/>
+    <fullyQualifiedTypeName name="javax.persistence.GeneratedValue"/>
+    <fullyQualifiedTypeName name="org.springframework.format.annotation.DateTimeFormat"/>
 </qualifiedTypeNameHistroy>
