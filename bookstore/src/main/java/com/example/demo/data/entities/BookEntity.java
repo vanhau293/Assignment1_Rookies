@@ -12,11 +12,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NamedQueries({
-	@NamedQuery(name = "Books.findAll", query = "SELECT b FROM Books b")
-    , @NamedQuery(name = "Books.findByBookId", query = "SELECT b FROM Books b WHERE b.bookId = :bookId")
-	, @NamedQuery(name = "Books.findByBookTitle", query = "SELECT b FROM Books b WHERE b.bookTitle = :bookTitle")
-	, @NamedQuery(name = "Books.findByPuslisher", query = "SELECT b FROM Books b WHERE b.puslisher = :puslisher")})
-public class Books {
+	@NamedQuery(name = "BookEntity.findAll", query = "SELECT b FROM BookEntity b")
+    , @NamedQuery(name = "BookEntity.findByBookId", query = "SELECT b FROM BookEntity b WHERE b.bookId = :bookId")
+	, @NamedQuery(name = "BookEntity.findByBookTitle", query = "SELECT b FROM BookEntity b WHERE b.bookTitle = :bookTitle")
+	, @NamedQuery(name = "BookEntity.findByPuslisher", query = "SELECT b FROM BookEntity b WHERE b.puslisher = :puslisher")})
+public class BookEntity {
 	@Id
     @Column(name = "book_id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,23 +35,25 @@ public class Books {
     private String bookTitle;
     @Column(name = "total_page", nullable = false)
     private int totalPage;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "books")
-    private Collection<OrderDetails> orderDetailsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "books")
-    private Collection<Cart> cartCollection;
+    @Column(name = "in_stock", nullable = false)
+    private boolean inStock;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookEntity")
+    private Collection<OrderDetailEntity> orderDetailsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookEntity")
+    private Collection<CartEntity> cartCollection;
     @JoinColumn(name = "author_id", referencedColumnName = "author_id", nullable = false)
     @ManyToOne(optional = false)
-    private Authors authorId;
+    private AuthorEntity authorId;
     @JoinColumn(name = "category_id", referencedColumnName = "category_id", nullable = false)
     @ManyToOne(optional = false)
-    private Categories categoryId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "books")
-    private Collection<Reviews> reviewsCollection;
-	public Books() {
+    private CategoryEntity categoryId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookEntity")
+    private Collection<ReviewEntity> reviewsCollection;
+	public BookEntity() {
 		super();
 	}
-	public Books(String title, String puslisher, long price, String description, byte[] image, Authors authorId,
-			Categories categoryId) {
+	public BookEntity(String title, String puslisher, long price, String description, byte[] image, AuthorEntity authorId,
+			CategoryEntity categoryId) {
 		super();
 		this.bookTitle = title;
 		this.puslisher = puslisher;

@@ -12,10 +12,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NamedQueries({
-    @NamedQuery(name = "Roles.findAll", query = "SELECT r FROM Roles r")
-    , @NamedQuery(name = "Roles.findByRoleId", query = "SELECT r FROM Roles r WHERE r.roleId = :roleId")
-    , @NamedQuery(name = "Roles.findByRoleName", query = "SELECT r FROM Roles r WHERE r.roleName = :roleName")})
-public class Roles {
+    @NamedQuery(name = "RoleEntity.findAll", query = "SELECT r FROM RoleEntity r")
+    , @NamedQuery(name = "RoleEntity.findByRoleId", query = "SELECT r FROM RoleEntity r WHERE r.roleId = :roleId")
+    , @NamedQuery(name = "RoleEntity.findByRoleName", query = "SELECT r FROM RoleEntity r WHERE r.roleName = :roleName")})
+public class RoleEntity {
 	
 	@Id
     @Column(name = "role_id", nullable = false)
@@ -24,13 +24,13 @@ public class Roles {
     @Column(name = "role_name", length = 50)
     private String roleName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleId")
-    private Collection<Accounts> accountsCollection;
+    private Collection<AccountEntity> accountsCollection;
     
-    public Roles() {
+    public RoleEntity() {
     	super();
     }
 
-    public Roles(String roleName) {
+    public RoleEntity(String roleName) {
     	super();
         this.roleName= roleName;
         

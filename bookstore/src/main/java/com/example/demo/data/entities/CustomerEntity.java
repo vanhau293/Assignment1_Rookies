@@ -12,11 +12,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NamedQueries({
-    @NamedQuery(name = "Customers.findAll", query = "SELECT c FROM Customers c")
-    , @NamedQuery(name = "Customers.findByCustomerId", query = "SELECT c FROM Customers c WHERE c.customerId = :customerId")
-    , @NamedQuery(name = "Customers.findByPhoneNumber", query = "SELECT c FROM Customers c WHERE c.phoneNumber = :phoneNumber")
-    , @NamedQuery(name = "Customers.findByEmail", query = "SELECT c FROM Customers c WHERE c.email = :email")})
-public class Customers {
+    @NamedQuery(name = "CustomerEntity.findAll", query = "SELECT c FROM CustomerEntity c")
+    , @NamedQuery(name = "CustomerEntity.findByCustomerId", query = "SELECT c FROM CustomerEntity c WHERE c.customerId = :customerId")
+    , @NamedQuery(name = "CustomerEntity.findByPhoneNumber", query = "SELECT c FROM CustomerEntity c WHERE c.phoneNumber = :phoneNumber")
+    , @NamedQuery(name = "CustomerEntity.findByEmail", query = "SELECT c FROM CustomerEntity c WHERE c.email = :email")})
+public class CustomerEntity {
 	@Id
     @Column(name = "customer_id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,21 +29,21 @@ public class Customers {
     private String name;
     @Column(name = "phone_number", nullable = false, length = 10)
     private String phoneNumber;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customers")
-    private Collection<Cart> cartCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customers")
-    private Collection<Reviews> reviewsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerEntity")
+    private Collection<CartEntity> cartCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerEntity")
+    private Collection<ReviewEntity> reviewsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerId")
-    private Collection<Orders> ordersCollection;
+    private Collection<OrderEntity> ordersCollection;
     @JoinColumn(name = "account_id", referencedColumnName = "account_id")
     @OneToOne
-    private Accounts accountId;
+    private AccountEntity accountId;
 
     
-    public Customers() {
+    public CustomerEntity() {
 		super();
 	}
-	public Customers(String name, String address, String phoneNumber, String email) {
+	public CustomerEntity(String name, String address, String phoneNumber, String email) {
 		super();
 		this.name = name;
 		this.address = address;

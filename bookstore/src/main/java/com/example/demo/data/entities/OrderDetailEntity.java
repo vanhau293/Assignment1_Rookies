@@ -9,40 +9,40 @@ import lombok.Setter;
 @Getter
 @Setter
 @NamedQueries({
-    @NamedQuery(name = "OrderDetails.findAll", query = "SELECT o FROM OrderDetails o")
-    , @NamedQuery(name = "OrderDetails.findByOrderId", query = "SELECT o FROM OrderDetails o WHERE o.orderDetailsPK.orderId = :orderId")})
-public class OrderDetails {
+    @NamedQuery(name = "OrderDetailEntity.findAll", query = "SELECT o FROM OrderDetailEntity o")
+    , @NamedQuery(name = "OrderDetailEntity.findByOrderId", query = "SELECT o FROM OrderDetailEntity o WHERE o.orderDetailPK.orderId = :orderId")})
+public class OrderDetailEntity {
 	@EmbeddedId
-    protected OrderDetailsPK orderDetailsPK;
+    protected OrderDetailPK orderDetailPK;
     @Column(name = "quantity", nullable = false)
     private int quantity;
     @Column(name = "unit_price", nullable = false)
     private long unitPrice;
     @JoinColumn(name = "book_id", referencedColumnName = "book_id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Books books;
+    private BookEntity bookEntity;
     @JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Orders orders;
+    private OrderEntity orderEntity;
     
-    public OrderDetails() {
+    public OrderDetailEntity() {
     	super();
     }
 
-    public OrderDetails(OrderDetailsPK orderDetailsPK) {
+    public OrderDetailEntity(OrderDetailPK orderDetailPK) {
     	super();
-        this.orderDetailsPK = orderDetailsPK;
+        this.orderDetailPK = orderDetailPK;
     }
 
-    public OrderDetails(OrderDetailsPK orderDetailsPK, int quantity, long unitPrice) {
+    public OrderDetailEntity(OrderDetailPK orderDetailPK, int quantity, long unitPrice) {
     	super();
-        this.orderDetailsPK = orderDetailsPK;
+        this.orderDetailPK = orderDetailPK;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
 
-    public OrderDetails(int orderId, int bookId) {
+    public OrderDetailEntity(int orderId, int bookId) {
     	super();
-        this.orderDetailsPK = new OrderDetailsPK(orderId, bookId);
+        this.orderDetailPK = new OrderDetailPK(orderId, bookId);
     }
 }

@@ -14,9 +14,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NamedQueries({
-    @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o")
-    , @NamedQuery(name = "Orders.findByOrderId", query = "SELECT o FROM Orders o WHERE o.orderId = :orderId")})
-public class Orders {
+    @NamedQuery(name = "OrderEntity.findAll", query = "SELECT o FROM OrderEntity o")
+    , @NamedQuery(name = "OrderEntity.findByOrderId", query = "SELECT o FROM OrderEntity o WHERE o.orderId = :orderId")})
+public class OrderEntity {
 	@Id
     @Column(name = "order_id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,24 +30,24 @@ public class Orders {
     @Basic(optional = false)
     @Column(name = "total_cash", nullable = false)
     private long totalCash;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orders")
-    private Collection<OrderDetails> orderDetailsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderEntity")
+    private Collection<OrderDetailEntity> orderDetailsCollection;
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false)
     @ManyToOne(optional = false)
-    private Customers customerId;
+    private CustomerEntity customerId;
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
     @ManyToOne
-    private Employees employeeId;
+    private EmployeeEntity employeeId;
     
-    public Orders() {
+    public OrderEntity() {
     	super();
     }
 
-    public Orders(Date createdDate, long totalCash, boolean confirmed, Employees employees) {
+    public OrderEntity(Date createdDate, long totalCash, boolean confirmed, EmployeeEntity employeeEntity) {
     	super();
         this.createdDate = createdDate;
         this.totalCash = totalCash;
         this.confirmed = confirmed;
-        this.employeeId = employees;
+        this.employeeId = employeeEntity;
     }
 }

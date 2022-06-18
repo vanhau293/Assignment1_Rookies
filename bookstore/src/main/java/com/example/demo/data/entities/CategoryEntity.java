@@ -12,24 +12,26 @@ import lombok.Setter;
 @Getter
 @Setter
 @NamedQueries({
-    @NamedQuery(name = "Categories.findAll", query = "SELECT c FROM Categories c")
-    , @NamedQuery(name = "Categories.findByCategoryId", query = "SELECT c FROM Categories c WHERE c.categoryId = :categoryId")
-    , @NamedQuery(name = "Categories.findByCategoryName", query = "SELECT c FROM Categories c WHERE c.categoryName = :categoryName")})
-public class Categories {
+    @NamedQuery(name = "CategoryEntity.findAll", query = "SELECT c FROM CategoryEntity c")
+    , @NamedQuery(name = "CategoryEntity.findByCategoryId", query = "SELECT c FROM CategoryEntity c WHERE c.categoryId = :categoryId")
+    , @NamedQuery(name = "CategoryEntity.findByCategoryName", query = "SELECT c FROM CategoryEntity c WHERE c.categoryName = :categoryName")})
+public class CategoryEntity {
 	@Id
     @Column(name = "category_id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;
     @Column(name = "category_name", nullable = false, length = 100)
     private String categoryName;
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoryId")
-    private Collection<Books> booksCollection;
+    private Collection<BookEntity> booksCollection;
 
-    public Categories() {
+    public CategoryEntity() {
 		super();
 	}
 
-	public Categories(String categoryName) {
+	public CategoryEntity(String categoryName) {
 		super();
 		this.categoryName = categoryName;
 	}

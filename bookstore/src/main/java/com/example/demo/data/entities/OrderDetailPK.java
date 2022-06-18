@@ -7,7 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class OrderDetailsPK implements Serializable{
+public class OrderDetailPK implements Serializable{
 	/**
 	 * 
 	 */
@@ -16,11 +16,11 @@ public class OrderDetailsPK implements Serializable{
     @Column(name = "order_id", nullable = false)
     private int orderId;
     
-	public OrderDetailsPK() {
+	public OrderDetailPK() {
 		super();
 	}
 
-	public OrderDetailsPK(int orderId, int bookId) {
+	public OrderDetailPK(int orderId, int bookId) {
 		super();
 		this.orderId = orderId;
 		this.bookId = bookId;

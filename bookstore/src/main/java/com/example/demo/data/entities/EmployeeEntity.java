@@ -12,11 +12,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NamedQueries({
-    @NamedQuery(name = "Employees.findAll", query = "SELECT e FROM Employees e")
-    , @NamedQuery(name = "Employees.findByEmployeeId", query = "SELECT e FROM Employees e WHERE e.employeeId = :employeeId")
-    , @NamedQuery(name = "Employees.findByPhoneNumber", query = "SELECT e FROM Employees e WHERE e.phoneNumber = :phoneNumber")
-    , @NamedQuery(name = "Employees.findByEmail", query = "SELECT e FROM Employees e WHERE e.email = :email")})
-public class Employees {
+    @NamedQuery(name = "EmployeeEntity.findAll", query = "SELECT e FROM EmployeeEntity e")
+    , @NamedQuery(name = "EmployeeEntity.findByEmployeeId", query = "SELECT e FROM EmployeeEntity e WHERE e.employeeId = :employeeId")
+    , @NamedQuery(name = "EmployeeEntity.findByPhoneNumber", query = "SELECT e FROM EmployeeEntity e WHERE e.phoneNumber = :phoneNumber")
+    , @NamedQuery(name = "EmployeeEntity.findByEmail", query = "SELECT e FROM EmployeeEntity e WHERE e.email = :email")})
+public class EmployeeEntity {
 	@Id
     @Column(name = "employee_id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,16 +32,16 @@ public class Employees {
     @Column(name = "phone_number", nullable = false, length = 10)
     private String phoneNumber;
     @OneToMany(mappedBy = "employeeId")
-    private Collection<Orders> ordersCollection;
+    private Collection<OrderEntity> ordersCollection;
     @JoinColumn(name = "account_id", referencedColumnName = "account_id")
     @OneToOne
-    private Accounts accountId;
+    private AccountEntity accountId;
     
-    public Employees() {
+    public EmployeeEntity() {
     	super();
     }
 
-    public Employees(String name, String gender, String address, String phoneNumber, String email) {
+    public EmployeeEntity(String name, String gender, String address, String phoneNumber, String email) {
 		super();
 		this.name = name;
 		this.gender = gender;
