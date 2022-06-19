@@ -1,10 +1,6 @@
 package com.example.demo.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class BookResponseDto {
 	private Integer bookId;
 	private String bookTitle;
@@ -23,5 +19,36 @@ public class BookResponseDto {
 		this.image = image;
 		this.price = price;
 	}
+	public Integer getBookId() {
+		return bookId;
+	}
+	public void setBookId(Integer bookId) {
+		this.bookId = bookId;
+	}
+	public String getBookTitle() {
+		return bookTitle;
+	}
+	public void setBookTitle(String bookTitle) {
+		this.bookTitle = bookTitle;
+	}
+	public Float getAvgRating() {
+		return avgRating;
+	}
+	public void setAvgRating(Float avgRating) {
+		this.avgRating = avgRating;
+	}
+	public byte[] getImage() {
+		return image;
+	}
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
+	public long getPrice() {
+		return price;
+	}
+	public void setPrice(long price) {
+		this.price = price;
+	}
+	
 	
 }

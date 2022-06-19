@@ -1,11 +1,10 @@
 package com.example.demo.dto.response;
 
 import java.util.Map;
-
 public class ErrorResponse {
 	String code;
 	String message;
-	Map<String, String> validationErrors;
+	Map<String, String> errors;
 	public String getCode() {
 		return code;
 	}
@@ -23,11 +22,17 @@ public class ErrorResponse {
 		this.code = code;
 		this.message = message;
 	}
-	public ErrorResponse(String code, String message, Map<String, String> validationErrors) {
+	public ErrorResponse(String code, String message, Map<String, String> errors) {
 		super();
 		this.code = code;
 		this.message = message;
-		this.validationErrors = validationErrors; 
+		this.errors = errors; 
+	}
+	public Map<String, String> getErrors() {
+		return errors;
+	}
+	public void setErrors(Map<String, String> errors) {
+		this.errors = errors;
 	}
 	
 	

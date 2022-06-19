@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.data.entities.AuthorEntity;
 import com.example.demo.dto.request.AuthorRequestDto;
 import com.example.demo.dto.response.AuthorResponseDto;
 import com.example.demo.services.AuthorService;
@@ -34,8 +33,9 @@ public class AuthorsController {
 	public AuthorResponseDto addAuthor(@Valid @RequestBody AuthorRequestDto dto) {
 		return authorService.addAuthor(dto);
 	}
+	
 	@PutMapping("/{id}")
-	public AuthorResponseDto updateAuthor(@PathVariable("id") Integer id,@Valid @RequestBody AuthorRequestDto dto) {
+	public AuthorResponseDto updateAuthor(@PathVariable("id") Integer id, @Valid @RequestBody AuthorRequestDto dto) {
 			return authorService.updateAuthor(id, dto);
 	}
 }

@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NamedQueries({
-    @NamedQuery(name = "CategoryEntity.findAll", query = "SELECT c FROM CategoryEntity c")
+    @NamedQuery(name = "CategoryEntity.findAll", query = "SELECT c FROM CategoryEntity c where c.deleted = false")
     , @NamedQuery(name = "CategoryEntity.findByCategoryId", query = "SELECT c FROM CategoryEntity c WHERE c.categoryId = :categoryId")
     , @NamedQuery(name = "CategoryEntity.findByCategoryName", query = "SELECT c FROM CategoryEntity c WHERE c.categoryName = :categoryName")})
 public class CategoryEntity {
@@ -35,5 +35,38 @@ public class CategoryEntity {
 		super();
 		this.categoryName = categoryName;
 	}
+
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public Collection<BookEntity> getBooksCollection() {
+		return booksCollection;
+	}
+
+	public void setBooksCollection(Collection<BookEntity> booksCollection) {
+		this.booksCollection = booksCollection;
+	}
+	
     
 }

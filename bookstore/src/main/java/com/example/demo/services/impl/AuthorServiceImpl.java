@@ -37,8 +37,6 @@ public class AuthorServiceImpl implements AuthorService{
 	@Override
 	public AuthorResponseDto addAuthor(AuthorRequestDto dto) {
 		// TODO Auto-generated method stub
-//		if(dto.getAuthorName().equals(""))
-//			throw new ResourceFoundException("Errorr"); // này nó bắt 404 kh bắt 400
 		AuthorEntity author = authorRepository.save(modelMapper.map(dto, AuthorEntity.class));
 		return modelMapper.map(author, AuthorResponseDto.class);
 	}
@@ -53,7 +51,7 @@ public class AuthorServiceImpl implements AuthorService{
 			author = authorRepository.save(author);
 			return modelMapper.map(author, AuthorResponseDto.class);
 		}
-		throw new ResourceFoundException();
+		throw new ResourceFoundException("AuthorId not found");
 	}
 	
 

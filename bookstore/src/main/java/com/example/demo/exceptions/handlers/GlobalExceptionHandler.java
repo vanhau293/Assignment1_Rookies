@@ -30,6 +30,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		ex.getBindingResult().getAllErrors().forEach((error) -> {
 			String fieldName = ((FieldError) error).getField();
 			String errorMessage = error.getDefaultMessage();
+
+			System.out.println(fieldName+" "+ errorMessage);
 			errors.put(fieldName, errorMessage);
 		});
 		ErrorResponse error = new ErrorResponse("400", "Validation Error", errors);
