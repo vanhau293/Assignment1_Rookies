@@ -1,28 +1,25 @@
 package com.example.demo.dto.request;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class BookRequestDto {// use add book
-	@NotEmpty(message = "Descrption must not be empty")
+
+public class BookUpdateRequestDto {
 	private String description;
 	private byte[] image;
-	@NotNull(message = "Price must not be null")
-	@Min(value = 0, message = "Price >= 0")
 	@Pattern(regexp = "\\d*", message = "Price must be a number")
+	@Min(value = 0, message = "Price >= 0")
 	private String price;
-	@NotEmpty(message = "Publisher must not be empty")
 	private String publisher;
-	@NotEmpty(message = "Book title must not be empty")
 	private String bookTitle;
-	@NotNull(message = "Total page must not be null")
-	@Min(value = 0, message = "Total page >= 0")
 	@Pattern(regexp = "\\d*", message = "Total page must be a number")
+	@Min(value = 0, message = "Total page >= 0")
 	private String totalPage;
 	
-	
+//	@Pattern(regexp = "\\d*", message = "Total page must be a number")
+//	@Min(value = 0, message = "Total page >= 0")
+//	private AuthorRequestDto authorId;
+//	private CategoryRequestDto categoryId;
 	public String getDescription() {
 		return description;
 	}
@@ -61,5 +58,4 @@ public class BookRequestDto {// use add book
 	}
 	
 	
-		
 }

@@ -9,9 +9,10 @@ import com.example.demo.dto.response.BookResponseDto;
 
 public interface BookService {
 	public List<BookResponseDto> getAllBooks(); // GET INSTOCK = TRUE
+	public List<BookResponseDto> getBooksOutOfStock();
 	public BookDetailsResponseDto getBook(int bookId);
-	public BookResponseDto addBook(BookRequestDto book);
-	public BookResponseDto updateBook(int bookId, BookRequestDto book);
+	public BookDetailsResponseDto addBook(BookRequestDto book);
+	public BookDetailsResponseDto updateBook(int bookId, BookRequestDto book);
 	public boolean deleteBook(int bookId);
 	
 }

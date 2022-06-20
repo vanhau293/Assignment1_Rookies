@@ -9,12 +9,14 @@ public class BookDetailsResponseDto {
     private String description;
     private byte[] image;
     private long price;
-    private String puslisher;
+    private String publisher;
     private String bookTitle;
     private int totalPage;
     private boolean inStock;
     private AuthorResponseDto authorId;
     private CategoryResponseDto categoryId;
+    private String authorName;
+    private String categoryName;
     private Collection<ReviewResponseDto> reviewsCollection;
 	public Float getAvgRating() {
 		return avgRating;
@@ -40,11 +42,11 @@ public class BookDetailsResponseDto {
 	public void setPrice(long price) {
 		this.price = price;
 	}
-	public String getPuslisher() {
-		return puslisher;
+	public String getPublisher() {
+		return publisher;
 	}
-	public void setPuslisher(String puslisher) {
-		this.puslisher = puslisher;
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
 	}
 	public String getBookTitle() {
 		return bookTitle;
@@ -64,23 +66,32 @@ public class BookDetailsResponseDto {
 	public void setInStock(boolean inStock) {
 		this.inStock = inStock;
 	}
-	public AuthorResponseDto getAuthorId() {
-		return authorId;
-	}
-	public void setAuthorId(AuthorResponseDto authorId) {
-		this.authorId = authorId;
-	}
-	public CategoryResponseDto getCategoryId() {
-		return categoryId;
-	}
-	public void setCategoryId(CategoryResponseDto categoryId) {
-		this.categoryId = categoryId;
-	}
+	
 	public Collection<ReviewResponseDto> getReviewsCollection() {
 		return reviewsCollection;
 	}
 	public void setReviewsCollection(Collection<ReviewResponseDto> reviewsCollection) {
 		this.reviewsCollection = reviewsCollection;
+	}
+	public void setAuthorId(AuthorResponseDto authorId) {
+		this.authorId = authorId;
+	}
+	public void setCategoryId(CategoryResponseDto categoryId) {
+		this.categoryId = categoryId;
+	}
+	public String getCategoryName() {
+		categoryName = categoryId.getCategoryName();
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+	public String getAuthorName() {
+		authorName = authorId.getAuthorName();
+		return authorName;
+	}
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
 	}
     
 }

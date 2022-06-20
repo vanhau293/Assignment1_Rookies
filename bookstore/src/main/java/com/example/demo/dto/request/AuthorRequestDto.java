@@ -4,16 +4,17 @@ import javax.validation.constraints.NotEmpty;
 
 public class AuthorRequestDto {
 		
-	@NotEmpty(message = "Author name must not be null")
-	private String authorName;
+	@NotEmpty(message = "AuthorId must not be empty")
+	private String authorId;
 
-	public String getAuthorName() {
-		return authorName;
+	public String getAuthorId() {
+		return authorId;
 	}
 
-	public void setAuthorName(String authorName) {
-		this.authorName = authorName;
+	public void setAuthorId(String authorId) {
+		this.authorId = authorId;
 	}
 
+	
 	
 }

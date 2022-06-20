@@ -51,7 +51,7 @@ public class AuthorServiceImpl implements AuthorService{
 			author = authorRepository.save(author);
 			return modelMapper.map(author, AuthorResponseDto.class);
 		}
-		throw new ResourceFoundException("AuthorId not found");
+		throw new ResourceFoundException("Author not found");
 	}
 	
 

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +28,11 @@ public class CategoryController {
 	@GetMapping("")
 	public List<CategoryResponseDto> getAllCategories(){
 		return categoryService.getAllCategories();
+	}
+	
+	@GetMapping("/deleted")
+	public List<CategoryResponseDto> getCategoriesDeleted(){
+		return categoryService.getCategoriesDeleted();
 	}
 	
 	@PostMapping("")

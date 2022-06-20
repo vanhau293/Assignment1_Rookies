@@ -12,7 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NamedQueries({
-    @NamedQuery(name = "CategoryEntity.findAll", query = "SELECT c FROM CategoryEntity c where c.deleted = false")
+    @NamedQuery(name = "CategoryEntity.findCategories", query = "SELECT c FROM CategoryEntity c where c.deleted = false")
+    , @NamedQuery(name = "CategoryEntity.findCategoriesDeleted", query = "SELECT c FROM CategoryEntity c where c.deleted = true")
     , @NamedQuery(name = "CategoryEntity.findByCategoryId", query = "SELECT c FROM CategoryEntity c WHERE c.categoryId = :categoryId")
     , @NamedQuery(name = "CategoryEntity.findByCategoryName", query = "SELECT c FROM CategoryEntity c WHERE c.categoryName = :categoryName")})
 public class CategoryEntity {

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.request.BookRequestDto;
+import com.example.demo.dto.request.BookUpdateRequestDto;
 import com.example.demo.dto.response.BookDetailsResponseDto;
 import com.example.demo.dto.response.BookResponseDto;
 import com.example.demo.services.BookService;
@@ -29,18 +30,23 @@ public class BookController {
 		return bookService.getAllBooks();
 	}
 	
+	@GetMapping("/outofstock")
+	public List<BookResponseDto> getBooksOutOfStock(){
+		return null;
+	}
+	
 	@GetMapping("/{id}")
 	public BookDetailsResponseDto getBook(@PathVariable Integer id) {
 		return bookService.getBook(id);
 	}
 	
 	@PostMapping("")
-	public BookResponseDto addBook(@Valid @RequestBody BookRequestDto book) {
+	public BookDetailsResponseDto addBook(@Valid @RequestBody BookRequestDto book) {
 		return bookService.addBook(book);
 	}
 	
 	@PutMapping("/{id}")
-	public BookResponseDto updateBook(@PathVariable Integer id, @Valid @RequestBody BookRequestDto book) {
+	public BookDetailsResponseDto updateBook(@PathVariable Integer id, @Valid @RequestBody BookRequestDto book) {
 		return bookService.updateBook(id, book);
 	}
 	

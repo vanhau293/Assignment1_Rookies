@@ -23,12 +23,21 @@ public class CategoryServiceImpl implements CategoryService {
 	ModelMapper modelMapper;
 	
 	@Override
-	public List<CategoryResponseDto> getAllCategories() {
+	public List<CategoryResponseDto> getAllCategories() { //get categories deleted = false
 		// TODO Auto-generated method stub
-		List<CategoryEntity> list = categoryRepository.findAll();
+		List<CategoryEntity> list = categoryRepository.findCategories();
 		List<CategoryResponseDto> listDto = new ArrayList<CategoryResponseDto>();
 		list.forEach(c -> listDto.add(modelMapper.map(c, CategoryResponseDto.class)));
 		return listDto;
+	}
+	
+	@Override
+	public List<CategoryResponseDto> getCategoriesDeleted() { // get Categories deleted = true;
+		// TODO Auto-generated method stub
+		List<CategoryEntity> list = categoryRepository.findCategoriesDeleted();
+		List<CategoryResponseDto> dto = new ArrayList<CategoryResponseDto>();
+		list.forEach(c -> dto.add(modelMapper.map(c, CategoryResponseDto.class)));
+		return dto;
 	}
 
 	@Override
@@ -57,4 +66,5 @@ public class CategoryServiceImpl implements CategoryService {
 		return false;
 	}
 
+	
 }
