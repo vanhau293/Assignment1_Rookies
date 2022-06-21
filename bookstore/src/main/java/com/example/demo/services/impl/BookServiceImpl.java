@@ -66,7 +66,9 @@ public class BookServiceImpl implements BookService{
 		if(optional.isPresent()) {
 			BookEntity book = optional.get();
 			modelMapper.map(dto, book);
+			System.out.println(book.getAuthorId().getAuthorName());
 			book = bookRepository.save(book);
+			
 			return modelMapper.map(book, BookDetailsResponseDto.class);
 		}
 		throw new ResourceFoundException("Book not found");

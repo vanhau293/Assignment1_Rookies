@@ -5,6 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+
 public class BookRequestDto {// use add book
 	@NotEmpty(message = "Descrption must not be empty")
 	private String description;
@@ -21,8 +22,15 @@ public class BookRequestDto {// use add book
 	@Min(value = 0, message = "Total page >= 0")
 	@Pattern(regexp = "\\d*", message = "Total page must be a number")
 	private String totalPage;
+    private boolean inStock;
 	
 	
+	public boolean isInStock() {
+		return inStock;
+	}
+	public void setInStock(boolean inStock) {
+		this.inStock = inStock;
+	}
 	public String getDescription() {
 		return description;
 	}

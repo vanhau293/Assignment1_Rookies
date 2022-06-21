@@ -38,9 +38,79 @@ public class AccountEntity {
     }
 
 
-    public AccountEntity(Integer accountId, String userName, String password) {
-        this.accountId = accountId;
+    public AccountEntity( String userName, String password) {
         this.userName = userName;
         this.password = password;
     }
+
+
+	public Integer getAccountId() {
+		return accountId;
+	}
+
+
+	public void setAccountId(Integer accountId) {
+		this.accountId = accountId;
+	}
+
+
+	public String getUserName() {
+		return userName;
+	}
+
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+	public boolean isBlocked() {
+		return blocked;
+	}
+
+
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
+	}
+
+
+	public RoleEntity getRoleId() {
+		return roleId;
+	}
+
+
+	public void setRoleId(RoleEntity roleId) {
+		this.roleId = roleId;
+	}
+
+
+	public CustomerEntity getCustomerEntity() {
+		return customerEntity;
+	}
+
+
+	public void setCustomerEntity(CustomerEntity customerEntity) {
+		this.customerEntity = customerEntity;
+	}
+
+
+	public EmployeeEntity getEmployeeEntity() {
+		return employeeEntity;
+	}
+
+
+	public void setEmployeeEntity(EmployeeEntity employeeEntity) {
+		this.employeeEntity = employeeEntity;
+	}
+    
 }
