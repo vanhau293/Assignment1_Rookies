@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,7 +42,7 @@ public class AuthController {
     final private AccountRepository accountRepository;
 
     final private RoleRepository roleRepository;
-
+    @Autowired
     final private PasswordEncoder encoder;
 
     final private JwtUtils jwtUtils;
@@ -64,14 +65,16 @@ public class AuthController {
 //        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         // on this step, we tell to authenticationManager how we load data from database
         // and the password encoder
+    	
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
+            new UsernamePasswordAuthenticationToken(loginRequest.getUsername()+" "+loginRequest.getPassword(), loginRequest.getPassword()));
+      
         // if go there, the user/password is correct
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // generate jwt to return to client
+        
         String jwt = jwtUtils.generateJwtToken(authentication);
-
+        
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
             .map(item -> item.getAuthority())
@@ -83,7 +86,7 @@ public class AuthController {
                                                  roles.get(0)));
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     	Optional<AccountEntity> optionalAcc = accountRepository.findByUserName(signUpRequest.getUsername());
         if (optionalAcc.isPresent()){

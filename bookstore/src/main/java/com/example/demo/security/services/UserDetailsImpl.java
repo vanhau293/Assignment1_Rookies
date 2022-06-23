@@ -21,7 +21,9 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
-    private Collection<? extends GrantedAuthority> authorities;
+	private Collection<? extends GrantedAuthority> authorities;
+
+
 
     public UserDetailsImpl(Integer id, String username, String password,
                            Collection<? extends GrantedAuthority> authorities) {
@@ -36,7 +38,6 @@ public class UserDetailsImpl implements UserDetails {
 //            .map(role -> new SimpleGrantedAuthority(role.getName().name()))
 //            .collect(Collectors.toList());
         Collection<? extends GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(user.getRoleId().getRoleName()));
-
         return new UserDetailsImpl(
             user.getAccountId(),
             user.getUserName(),

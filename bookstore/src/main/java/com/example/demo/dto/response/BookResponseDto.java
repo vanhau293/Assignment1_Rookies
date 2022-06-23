@@ -7,7 +7,21 @@ public class BookResponseDto {
 	private Float avgRating;
 	private byte[] image;
 	private long price;
+	private AuthorResponseDto authorId;
+	private CategoryResponseDto categoryId;
 	
+	public AuthorResponseDto getAuthorId() {
+		return authorId;
+	}
+	public void setAuthorId(AuthorResponseDto authorId) {
+		this.authorId = authorId;
+	}
+	public CategoryResponseDto getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(CategoryResponseDto categoryId) {
+		this.categoryId = categoryId;
+	}
 	public BookResponseDto() {
 		super();
 	}

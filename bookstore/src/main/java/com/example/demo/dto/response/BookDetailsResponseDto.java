@@ -4,19 +4,20 @@ import java.util.Collection;
 
 
 public class BookDetailsResponseDto {
-
-    private Float avgRating;
-    private String description;
-    private byte[] image;
+	private String bookTitle;
+	private AuthorResponseDto authorId;
+    private CategoryResponseDto categoryId;
     private long price;
     private String publisher;
-    private String bookTitle;
+    private byte[] image;
+    private Float avgRating;
+    private String description;
+    
+    
+    
     private int totalPage;
     private boolean inStock;
-    private AuthorResponseDto authorId;
-    private CategoryResponseDto categoryId;
-    private String authorName;
-    private String categoryName;
+    
     private Collection<ReviewResponseDto> reviewsCollection;
 	public Float getAvgRating() {
 		return avgRating;
@@ -79,19 +80,12 @@ public class BookDetailsResponseDto {
 	public void setCategoryId(CategoryResponseDto categoryId) {
 		this.categoryId = categoryId;
 	}
-	public String getCategoryName() {
-		categoryName = categoryId.getCategoryName();
-		return categoryName;
+	public AuthorResponseDto getAuthorId() {
+		return authorId;
 	}
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
+	public CategoryResponseDto getCategoryId() {
+		return categoryId;
 	}
-	public String getAuthorName() {
-		authorName = authorId.getAuthorName();
-		return authorName;
-	}
-	public void setAuthorName(String authorName) {
-		this.authorName = authorName;
-	}
+	
     
 }

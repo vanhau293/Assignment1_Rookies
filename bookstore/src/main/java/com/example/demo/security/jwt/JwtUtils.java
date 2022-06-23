@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.exceptions.UnauthorizedException;
 import com.example.demo.security.services.UserDetailsImpl;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -33,9 +35,13 @@ public class JwtUtils {
     public String generateJwtToken(Authentication authentication) {
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
+        Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
+        claims.put("username", userPrincipal.getUsername());
+        System.out.println(userPrincipal.getUsername());
+        claims.put("password", userPrincipal.getPassword());
         return Jwts.builder()
-            .setSubject((userPrincipal.getUsername()))
+            .setSubject(userPrincipal.getUsername())
+            .setClaims(claims)
             .setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
             .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -45,6 +51,10 @@ public class JwtUtils {
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
+    public String getUserFromJwtToken(String token) {
+    	Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+    	return claims.get("username") + " "+ claims.get("password");
+    }
 
     public boolean validateJwtToken(String authToken) {
         try {
@@ -53,7 +63,9 @@ public class JwtUtils {
         } catch (SignatureException e) {
             logger.error("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
+        	
             logger.error("Invalid JWT token: {}", e.getMessage());
+            
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
@@ -63,5 +75,22 @@ public class JwtUtils {
         }
 
         return false;
+    }
+    public void validateJwtToke(String authToken) {
+    	try {
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            return;
+        } catch (SignatureException e) {
+        	throw new UnauthorizedException("Invalid JWT signature: "+ e.getMessage());
+        } catch (MalformedJwtException e) {
+        	throw new UnauthorizedException("Invalid JWT token: "+ e.getMessage());
+            
+        } catch (ExpiredJwtException e) {
+        	throw new UnauthorizedException("JWT token is expired: "+ e.getMessage());
+        } catch (UnsupportedJwtException e) {
+        	throw new UnauthorizedException("JWT token is unsupported: "+ e.getMessage());
+        } catch (IllegalArgumentException e) {
+        	throw new UnauthorizedException("JWT claims string is empty: "+ e.getMessage());
+        }
     }
 }

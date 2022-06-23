@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.example.demo.dto.response.ErrorResponse;
 import com.example.demo.exceptions.ResourceFoundException;
+import com.example.demo.exceptions.UnauthorizedException;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 	@ExceptionHandler({ResourceFoundException.class})
@@ -22,6 +23,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 			WebRequest request) {
 		ErrorResponse error = new ErrorResponse("404", exception.getMessage());
 		return new ResponseEntity<ErrorResponse>(error, HttpStatus.NOT_FOUND);
+	}
+	@ExceptionHandler({UnauthorizedException.class})
+	protected ResponseEntity<ErrorResponse> handleUnauthorizedException(RuntimeException exception, WebRequest request){
+		ErrorResponse error = new ErrorResponse("401", exception.getMessage());
+		return new ResponseEntity<ErrorResponse>(error, HttpStatus.UNAUTHORIZED);
 	}
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

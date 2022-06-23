@@ -23,8 +23,24 @@ public class BookRequestDto {// use add book
 	@Pattern(regexp = "\\d*", message = "Total page must be a number")
 	private String totalPage;
     private boolean inStock;
+    @NotNull(message = "Category must not be null")
+    private CategoryRequestDto categoryId;
+    @NotNull(message = "Author must not be null")
+    private AuthorRequestDto authorId;
 	
 	
+	public CategoryRequestDto getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(CategoryRequestDto categoryId) {
+		this.categoryId = categoryId;
+	}
+	public AuthorRequestDto getAuthorId() {
+		return authorId;
+	}
+	public void setAuthorId(AuthorRequestDto authorId) {
+		this.authorId = authorId;
+	}
 	public boolean isInStock() {
 		return inStock;
 	}
