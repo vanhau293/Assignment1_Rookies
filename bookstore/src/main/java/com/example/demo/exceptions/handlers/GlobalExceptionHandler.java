@@ -29,6 +29,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		ErrorResponse error = new ErrorResponse("401", exception.getMessage());
 		return new ResponseEntity<ErrorResponse>(error, HttpStatus.UNAUTHORIZED);
 	}
+	@ExceptionHandler({IllegalArgumentException.class })
+	protected ResponseEntity<ErrorResponse> handleIllegalArgumentException(RuntimeException exception,
+			WebRequest request) {
+		ErrorResponse error = new ErrorResponse("400", exception.getMessage());
+		return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+	}
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {

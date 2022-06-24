@@ -39,10 +39,10 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
         throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
+            //jwtUtils.validateJwtToke(jwt);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String s = jwtUtils.getUserFromJwtToken(jwt);
                 String thongtin[] = s.split(" ");
-                System.out.print(s);
                 // TODO
                 UserDetails userDetails = userDetailsService.loadUser(thongtin[0],thongtin[1]);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.data.entities.BookEntity;
@@ -14,6 +15,7 @@ import com.example.demo.dto.request.BookRequestDto;
 import com.example.demo.dto.response.BookDetailsResponseDto;
 import com.example.demo.dto.response.BookResponseDto;
 import com.example.demo.exceptions.ResourceFoundException;
+import com.example.demo.payload.response.MessageResponse;
 import com.example.demo.services.BookService;
 
 @Service
@@ -75,9 +77,21 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public boolean deleteBook(int bookId) {
+	public ResponseEntity<?> deleteBook(int bookId) {
 		// TODO Auto-generated method stub
-		return false;
+		Optional<BookEntity> optional = bookRepository.findById(bookId);
+		if(optional.isPresent()) {
+			BookEntity book = optional.get();
+			if(!book.isInStock()) {
+				return ResponseEntity.badRequest().body(new MessageResponse("The book has been deleted before")) ;
+			}
+			else {
+				book.setInStock(false);
+				bookRepository.save(book);
+				return ResponseEntity.ok(new MessageResponse("The book deleted successfully")) ;
+			}
+		}
+		throw new ResourceFoundException("The book is not found");
 	}
 
 	

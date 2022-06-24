@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.data.entities.CategoryEntity;
@@ -13,6 +14,7 @@ import com.example.demo.data.repositories.CategoryRepository;
 import com.example.demo.dto.request.CategoryRequestDto;
 import com.example.demo.dto.response.CategoryResponseDto;
 import com.example.demo.exceptions.ResourceFoundException;
+import com.example.demo.payload.response.MessageResponse;
 import com.example.demo.services.CategoryService;
 
 @Service
@@ -61,9 +63,21 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public boolean deleteCategory(Integer id) {
+	public ResponseEntity<?> deleteCategory(Integer id) {
 		// TODO Auto-generated method stub
-		return false;
+		Optional<CategoryEntity> optional = categoryRepository.findById(id);
+		if(optional.isPresent()) {
+			CategoryEntity category = optional.get();
+			if(category.isDeleted()) {
+				return ResponseEntity.badRequest().body(new MessageResponse("The category has been deleted before"));
+			}
+			else {
+				category.setDeleted(true);
+				categoryRepository.save(category);
+				return ResponseEntity.ok(new MessageResponse("The category deleted successfully"));
+			}
+		}
+		throw new ResourceFoundException("Category is not found");
 	}
 
 	

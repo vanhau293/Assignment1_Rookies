@@ -8,7 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 @Entity
 @Table(name = "customers", uniqueConstraints = {
-	    @UniqueConstraint(columnNames = {"account_id"})})
+	    @UniqueConstraint(columnNames = {"account_id"}),
+	    @UniqueConstraint(columnNames = {"phone_number"})})
 @Getter
 @Setter
 @NamedQueries({
@@ -49,6 +50,60 @@ public class CustomerEntity {
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+	}
+	public Integer getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public Collection<CartEntity> getCartCollection() {
+		return cartCollection;
+	}
+	public void setCartCollection(Collection<CartEntity> cartCollection) {
+		this.cartCollection = cartCollection;
+	}
+	public Collection<ReviewEntity> getReviewsCollection() {
+		return reviewsCollection;
+	}
+	public void setReviewsCollection(Collection<ReviewEntity> reviewsCollection) {
+		this.reviewsCollection = reviewsCollection;
+	}
+	public Collection<OrderEntity> getOrdersCollection() {
+		return ordersCollection;
+	}
+	public void setOrdersCollection(Collection<OrderEntity> ordersCollection) {
+		this.ordersCollection = ordersCollection;
+	}
+	public AccountEntity getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(AccountEntity accountId) {
+		this.accountId = accountId;
 	}
     
     

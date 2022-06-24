@@ -20,11 +20,16 @@ import com.example.demo.services.AuthorService;
 @Service
 public class AuthorServiceImpl implements AuthorService{
 
-	@Autowired
+	
 	private AuthorRepository authorRepository;
-	@Autowired
 	private ModelMapper modelMapper;
 	
+	@Autowired
+	public AuthorServiceImpl(AuthorRepository authorRepository, ModelMapper modelMapper) {
+		this.authorRepository = authorRepository;
+		this.modelMapper = modelMapper;
+	}
+			
 	@Override
 	public List<AuthorResponseDto> getAllAuthors() {
 		// TODO Auto-generated method stub

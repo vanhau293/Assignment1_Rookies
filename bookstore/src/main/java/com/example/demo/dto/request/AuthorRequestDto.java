@@ -26,6 +26,16 @@ public class AuthorRequestDto {
 		this.authorName = authorName;
 	}
 
+	public AuthorRequestDto(String authorId, @NotEmpty(message = "Author Name must not be empty") String authorName) {
+		super();
+		this.authorId = authorId;
+		this.authorName = authorName;
+	}
+
+	public AuthorRequestDto() {
+		super();
+	}
+
 	
 	
 }

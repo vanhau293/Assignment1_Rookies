@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import com.example.demo.data.entities.AccountEntity;
 import com.example.demo.data.entities.RoleEntity;
 import com.example.demo.data.repositories.AccountRepository;
 import com.example.demo.data.repositories.RoleRepository;
+import com.example.demo.dto.request.RegisterRequestDto;
 import com.example.demo.exceptions.ResourceFoundException;
 import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
@@ -30,6 +32,8 @@ import com.example.demo.payload.response.JwtResponse;
 import com.example.demo.payload.response.MessageResponse;
 import com.example.demo.security.jwt.JwtUtils;
 import com.example.demo.security.services.UserDetailsImpl;
+import com.example.demo.services.AccountService;
+import com.example.demo.services.CustomerService;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -46,6 +50,13 @@ public class AuthController {
     final private PasswordEncoder encoder;
 
     final private JwtUtils jwtUtils;
+    
+    @Autowired 
+    private AccountService accountService;
+    @Autowired
+    private CustomerService customerService;
+    
+    
 
     public AuthController (AuthenticationManager authenticationManager, AccountRepository accountRepository,
                            RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
@@ -85,17 +96,22 @@ public class AuthController {
                                                  userDetails.getUsername(),
                                                  roles.get(0)));
     }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    @PostMapping("/register") // đăng ký tài khoản cả thông tin khách hàng
+    @Transactional
+    public ResponseEntity<?> registerAccountEmployee(@Valid @RequestBody RegisterRequestDto dto){
+    	dto.setPassword(encoder.encode(dto.getPassword()));
+    	AccountEntity account = accountService.addAccount(dto);
+    	return customerService.addCustomer(dto, account);
+    }
+    
+    @PostMapping("/signup") // đăng ký mọi tài khoản không thêm thông tin vào bảng khách hoặc nhân viên
+    public ResponseEntity<?> signupUser(@Valid @RequestBody SignupRequest signUpRequest) {
     	Optional<AccountEntity> optionalAcc = accountRepository.findByUserName(signUpRequest.getUsername());
         if (optionalAcc.isPresent()){
             return ResponseEntity
                 .badRequest()
                 .body(new MessageResponse("Error: Username is already taken!"));
         }
-
-        
 
         // Create new user's account
         AccountEntity user = new AccountEntity(signUpRequest.getUsername(),
