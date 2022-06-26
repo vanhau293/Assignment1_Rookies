@@ -11,8 +11,10 @@ import com.example.demo.data.entities.AccountEntity;
 import com.example.demo.data.entities.RoleEntity;
 import com.example.demo.data.repositories.AccountRepository;
 import com.example.demo.data.repositories.RoleRepository;
+import com.example.demo.dto.request.AccountUpdateRequestDto;
 import com.example.demo.dto.request.RegisterRequestDto;
 import com.example.demo.exceptions.ResourceFoundException;
+import com.example.demo.payload.response.MessageResponse;
 import com.example.demo.services.AccountService;
 @Service
 public class AccountServiceImpl implements AccountService{
@@ -47,15 +49,32 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	@Override
-	public ResponseEntity<?> updateAccount(RegisterRequestDto dto) {
+	public ResponseEntity<?> updateAccount(AccountUpdateRequestDto dto, Integer accountId) {
 		// TODO Auto-generated method stub
-		return null;
+		Optional<AccountEntity> optional = accountRepository.findById(accountId);
+		if(!optional.isPresent()) {
+			throw new ResourceFoundException("Account is not found");
+		}
+		AccountEntity account = optional.get();
+		account.setPassword(dto.getPassword());
+		accountRepository.save(account);
+		
+		return ResponseEntity.ok(new MessageResponse("Update password successfully"));
 	}
 
 	@Override
-	public ResponseEntity<?> blockAccount(RegisterRequestDto dto) {
+	public ResponseEntity<?> blockAccount(Integer accountId) {
 		// TODO Auto-generated method stub
-		return null;
+		Optional<AccountEntity> optional = accountRepository.findById(accountId);
+		if(!optional.isPresent()) {
+			throw new ResourceFoundException("Account is not found");
+		}
+		AccountEntity account = optional.get();
+		if(account.isBlocked()) {
+			return ResponseEntity.badRequest().body(new MessageResponse("The account has been deleted before")) ;
+		}
+		account.setBlocked(true);
+		return ResponseEntity.ok(new MessageResponse("The account blocked successfully"));
 	}
 
 }

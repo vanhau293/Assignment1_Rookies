@@ -32,7 +32,7 @@ public class BookController {
 	
 	@GetMapping("/outofstock")
 	public List<BookResponseDto> getBooksOutOfStock(){
-		return null;
+		return bookService.getBooksOutOfStock();
 	}
 	
 	@GetMapping("/{id}")
@@ -41,16 +41,16 @@ public class BookController {
 	}
 	
 	@PostMapping("")
-	public BookDetailsResponseDto addBook(@Valid @RequestBody BookRequestDto book) {
+	public ResponseEntity<?> addBook(@Valid @RequestBody BookRequestDto book) {
 		return bookService.addBook(book);
 	}
 	
 	@PutMapping("/{id}")
-	public BookDetailsResponseDto updateBook(@PathVariable Integer id, @Valid @RequestBody BookRequestDto book) {
+	public ResponseEntity<?> updateBook(@PathVariable Integer id, @Valid @RequestBody BookRequestDto book) {
 		return bookService.updateBook(id, book);
 	}
 	
-	@DeleteMapping("/id")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteBook(@PathVariable Integer id) {
 		return bookService.deleteBook(id);
 	}

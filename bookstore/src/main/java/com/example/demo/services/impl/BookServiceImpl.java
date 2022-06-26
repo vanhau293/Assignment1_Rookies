@@ -55,14 +55,14 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public BookDetailsResponseDto addBook(BookRequestDto dto) {
+	public ResponseEntity<?> addBook(BookRequestDto dto) {
 		// TODO Auto-generated method stub
-		BookEntity book = bookRepository.save(modelMapper.map(dto,BookEntity.class));
-		return modelMapper.map(book, BookDetailsResponseDto.class);
+		bookRepository.save(modelMapper.map(dto,BookEntity.class));
+		return ResponseEntity.ok(new MessageResponse("The book was added successfully"));
 	}
 
 	@Override
-	public BookDetailsResponseDto updateBook(int bookId, BookRequestDto dto) {
+	public ResponseEntity<?> updateBook(int bookId, BookRequestDto dto) {
 		// TODO Auto-generated method stub
 		Optional<BookEntity> optional = bookRepository.findById(bookId);
 		if(optional.isPresent()) {
@@ -71,7 +71,7 @@ public class BookServiceImpl implements BookService{
 			System.out.println(book.getAuthorId().getAuthorName());
 			book = bookRepository.save(book);
 			
-			return modelMapper.map(book, BookDetailsResponseDto.class);
+			return ResponseEntity.ok(new MessageResponse("The book was updated successfully"));
 		}
 		throw new ResourceFoundException("Book not found");
 	}

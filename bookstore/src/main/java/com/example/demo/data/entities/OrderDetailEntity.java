@@ -40,9 +40,56 @@ public class OrderDetailEntity {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
+    
+    public OrderDetailEntity(int quantity, long unitPrice) {
+		super();
+		this.quantity = quantity;
+		this.unitPrice = unitPrice;
+	}
 
-    public OrderDetailEntity(int orderId, int bookId) {
+	public OrderDetailEntity(int orderId, int bookId) {
     	super();
         this.orderDetailPK = new OrderDetailPK(orderId, bookId);
     }
+
+	public OrderDetailPK getOrderDetailPK() {
+		return orderDetailPK;
+	}
+
+	public void setOrderDetailPK(OrderDetailPK orderDetailPK) {
+		this.orderDetailPK = orderDetailPK;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public long getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(long unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	public BookEntity getBookEntity() {
+		return bookEntity;
+	}
+
+	public void setBookEntity(BookEntity bookEntity) {
+		this.bookEntity = bookEntity;
+	}
+
+	public OrderEntity getOrderEntity() {
+		return orderEntity;
+	}
+
+	public void setOrderEntity(OrderEntity orderEntity) {
+		this.orderEntity = orderEntity;
+	}
+	
 }

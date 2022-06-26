@@ -13,8 +13,8 @@ public interface BookService {
 	public List<BookResponseDto> getAllBooks(); // GET INSTOCK = TRUE
 	public List<BookResponseDto> getBooksOutOfStock();
 	public BookDetailsResponseDto getBook(int bookId);
-	public BookDetailsResponseDto addBook(BookRequestDto book);
-	public BookDetailsResponseDto updateBook(int bookId, BookRequestDto book);
+	public ResponseEntity<?> addBook(BookRequestDto book);
+	public ResponseEntity<?> updateBook(int bookId, BookRequestDto book);
 	public ResponseEntity<?> deleteBook(int bookId);
 	
 }

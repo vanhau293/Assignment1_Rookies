@@ -54,6 +54,12 @@ public class BookEntity {
 	public BookEntity() {
 		super();
 	}
+	
+	public BookEntity(Integer bookId) {
+		super();
+		this.bookId = bookId;
+	}
+
 	public BookEntity(String title, String publisher, long price, String description, byte[] image, AuthorEntity authorId,
 			CategoryEntity categoryId) {
 		super();
