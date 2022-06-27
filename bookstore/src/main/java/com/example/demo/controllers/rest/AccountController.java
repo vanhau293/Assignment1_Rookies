@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.request.AccountUpdateRequestDto;
+import com.example.demo.data.dto.AccountUpdateDto;
 import com.example.demo.services.AccountService;
 
 @RestController
@@ -22,7 +22,7 @@ public class AccountController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateAccount(@PathVariable Integer accountId, 
-			@Valid @RequestBody AccountUpdateRequestDto dto){
+			@Valid @RequestBody AccountUpdateDto dto){
 		return accountService.updateAccount(dto, accountId);
 	}
 	

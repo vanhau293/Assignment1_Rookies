@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.data.dto.AccountUpdateDto;
 import com.example.demo.data.entities.AccountEntity;
 import com.example.demo.data.entities.RoleEntity;
-import com.example.demo.data.repositories.AccountRepository;
-import com.example.demo.data.repositories.RoleRepository;
-import com.example.demo.dto.request.AccountUpdateRequestDto;
-import com.example.demo.dto.request.RegisterRequestDto;
-import com.example.demo.exceptions.ResourceFoundException;
-import com.example.demo.payload.response.MessageResponse;
+import com.example.demo.repositories.AccountRepository;
+import com.example.demo.repositories.RoleRepository;
+import com.example.demo.request.RegisterRequest;
+import com.example.demo.response.MessageResponse;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.services.AccountService;
 @Service
 public class AccountServiceImpl implements AccountService{
@@ -31,7 +31,7 @@ public class AccountServiceImpl implements AccountService{
 		this.modelMapper = modelMapper;
 	}
 	@Override
-	public AccountEntity addAccount(RegisterRequestDto dto) {
+	public AccountEntity addAccount(RegisterRequest dto) {
 		// TODO Auto-generated method stub
 		Optional<AccountEntity> optional = accountRepository.findByUserName(dto.getUserName());
 		if(optional.isPresent()) {
@@ -40,7 +40,7 @@ public class AccountServiceImpl implements AccountService{
 		AccountEntity account = modelMapper.map(dto, AccountEntity.class);
 		Optional<RoleEntity> roleOptional = roleRepository.findByRoleName("Customer");
 		if(!roleOptional.isPresent()) {
-			throw new ResourceFoundException("Role name not found");
+			throw new ResourceNotFoundException("Role name not found");
 		}
 		RoleEntity role = roleOptional.get();
 		account.setRoleId(role);
@@ -49,11 +49,11 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	@Override
-	public ResponseEntity<?> updateAccount(AccountUpdateRequestDto dto, Integer accountId) {
+	public ResponseEntity<?> updateAccount(AccountUpdateDto dto, Integer accountId) {
 		// TODO Auto-generated method stub
 		Optional<AccountEntity> optional = accountRepository.findById(accountId);
 		if(!optional.isPresent()) {
-			throw new ResourceFoundException("Account is not found");
+			throw new ResourceNotFoundException("Account is not found");
 		}
 		AccountEntity account = optional.get();
 		account.setPassword(dto.getPassword());
@@ -67,7 +67,7 @@ public class AccountServiceImpl implements AccountService{
 		// TODO Auto-generated method stub
 		Optional<AccountEntity> optional = accountRepository.findById(accountId);
 		if(!optional.isPresent()) {
-			throw new ResourceFoundException("Account is not found");
+			throw new ResourceNotFoundException("Account is not found");
 		}
 		AccountEntity account = optional.get();
 		if(account.isBlocked()) {

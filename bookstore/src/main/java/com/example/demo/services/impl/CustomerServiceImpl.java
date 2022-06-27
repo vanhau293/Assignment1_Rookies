@@ -9,15 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.data.dto.CustomerDto;
+import com.example.demo.data.dto.OrderDto;
 import com.example.demo.data.entities.AccountEntity;
 import com.example.demo.data.entities.CustomerEntity;
-import com.example.demo.data.repositories.CustomerRepository;
-import com.example.demo.dto.request.CustomerRequestDto;
-import com.example.demo.dto.request.RegisterRequestDto;
-import com.example.demo.dto.response.CustomerResponseDto;
-import com.example.demo.dto.response.OrderResponseDto;
-import com.example.demo.exceptions.ResourceFoundException;
-import com.example.demo.payload.response.MessageResponse;
+import com.example.demo.repositories.CustomerRepository;
+import com.example.demo.request.RegisterRequest;
+import com.example.demo.response.MessageResponse;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.services.CustomerService;
 @Service
 public class CustomerServiceImpl implements CustomerService{
@@ -31,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 	
 	@Override
-	public ResponseEntity<?> addCustomer(RegisterRequestDto dto, AccountEntity account) {
+	public ResponseEntity<?> addCustomer(RegisterRequest dto, AccountEntity account) {
 		// TODO Auto-generated method stub
 		Optional<CustomerEntity> optional = customerRepository.findByPhoneNumber(dto.getPhoneNumber());
 		if(optional.isPresent()) {
@@ -44,11 +43,11 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	public ResponseEntity<?> updateCustomer(Integer customerId, CustomerRequestDto dto) {
+	public ResponseEntity<?> updateCustomer(Integer customerId, CustomerDto dto) {
 		// TODO Auto-generated method stub
 		Optional<CustomerEntity> optional = customerRepository.findById(customerId);
 		if(!optional.isPresent()) {
-			throw new ResourceFoundException("Customer not found");
+			throw new ResourceNotFoundException("Customer not found");
 		}
 		CustomerEntity customer = optional.get();
 		if(!customer.getPhoneNumber().equals(dto.getPhoneNumber())) {
@@ -64,31 +63,31 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	public CustomerResponseDto getCustomer(Integer customerId) {
+	public CustomerDto getCustomer(Integer customerId) {
 		// TODO Auto-generated method stub
 		Optional<CustomerEntity> optional = customerRepository.findById(customerId);
 		if(!optional.isPresent()) {
-			throw new ResourceFoundException("Customer not found");
+			throw new ResourceNotFoundException("Customer not found");
 		}
 		CustomerEntity customer = optional.get();
 		
-		return modelMapper.map(customer, CustomerResponseDto.class);
+		return modelMapper.map(customer, CustomerDto.class);
 	}
 
 	@Override
-	public List<OrderResponseDto> getOrders(Integer customerId) {
+	public ResponseEntity<?> getOrders(Integer customerId) {
 		// TODO Auto-generated method stub
 		Optional<CustomerEntity> optional = customerRepository.findById(customerId);
 		if(!optional.isPresent()) {
-			throw new ResourceFoundException("Customer not found");
+			throw new ResourceNotFoundException("Customer not found");
 		}
 		CustomerEntity customer = optional.get();
 		if(customer.getOrdersCollection().size() == 0) {
-			throw new ResourceFoundException("Customer don't have orders");
+			return ResponseEntity.ok("Customer don't have orders");
 		}
-		List<OrderResponseDto> list = new ArrayList<OrderResponseDto>();
-		customer.getOrdersCollection().forEach(order -> list.add(modelMapper.map(order, OrderResponseDto.class)));
-		return null;
+		List<OrderDto> list = new ArrayList<OrderDto>();
+		customer.getOrdersCollection().forEach(order -> list.add(modelMapper.map(order, OrderDto.class)));
+		return ResponseEntity.ok(list);
 	}
 
 }

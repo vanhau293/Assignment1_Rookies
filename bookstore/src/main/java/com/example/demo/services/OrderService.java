@@ -3,15 +3,13 @@ package com.example.demo.services;
 
 import org.springframework.http.ResponseEntity;
 
-import com.example.demo.dto.request.OrderRequestDto;
-import com.example.demo.dto.response.OrderResponseDto;
+import com.example.demo.data.dto.OrderDto;
 
 public interface OrderService {
-	public ResponseEntity<?> getOrdersOnDate(String date);
+	public ResponseEntity<?> getOrders(String date,Integer statusId);
 	
-	public OrderResponseDto getOrder(Integer id);
-	public ResponseEntity<?> addOrder(OrderRequestDto dto);
-	public ResponseEntity<?> getOrdersPending();
+	public OrderDto getOrder(Integer id);
+	public ResponseEntity<?> addOrder(OrderDto dto);
 	public ResponseEntity<?> confirmOrder(Integer id);
 	
 }

@@ -9,13 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.data.dto.BookDto;
 import com.example.demo.data.entities.BookEntity;
-import com.example.demo.data.repositories.BookRepository;
-import com.example.demo.dto.request.BookRequestDto;
-import com.example.demo.dto.response.BookDetailsResponseDto;
-import com.example.demo.dto.response.BookResponseDto;
-import com.example.demo.exceptions.ResourceFoundException;
-import com.example.demo.payload.response.MessageResponse;
+import com.example.demo.repositories.BookRepository;
+import com.example.demo.response.MessageResponse;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.services.BookService;
 
 @Service
@@ -26,43 +24,36 @@ public class BookServiceImpl implements BookService{
 	ModelMapper modelMapper;
 	
 	@Override
-	public List<BookResponseDto> getAllBooks() { // get book in stock
+	public ResponseEntity<?> getAllBooks(boolean outStock) { // get book in stock
 		// TODO Auto-generated method stub
-		List<BookEntity> list = bookRepository.findBooksInStock();
-		List<BookResponseDto> dto = new ArrayList<BookResponseDto>();
-		list.forEach(b -> dto.add(modelMapper.map(b, BookResponseDto.class)));
-		return dto;
+		List<BookEntity> list;
+		if(outStock == false) list= bookRepository.findBooksInStock();
+		else list = bookRepository.findBooksOutOfStock();
+		List<BookDto> dto = new ArrayList<BookDto>();
+		list.forEach(b -> dto.add(modelMapper.map(b, BookDto.class)));
+		return ResponseEntity.ok(dto);
 	}
 
 	@Override
-	public List<BookResponseDto> getBooksOutOfStock() { // get book out of stock
-		// TODO Auto-generated method stub
-		List<BookEntity> list = bookRepository.findBooksOutOfStock();
-		List<BookResponseDto> dto = new ArrayList<BookResponseDto>();
-		list.forEach(b -> dto.add(modelMapper.map(b, BookResponseDto.class)));
-		return dto;
-	}
-	
-	@Override
-	public BookDetailsResponseDto getBook(int bookId) {
+	public BookDto getBook(int bookId) {
 		// TODO Auto-generated method stub
 		Optional<BookEntity> optional = bookRepository.findById(bookId);
 		if(optional.isPresent()) {
 			BookEntity book = optional.get();
-			return modelMapper.map(book, BookDetailsResponseDto.class);
+			return modelMapper.map(book, BookDto.class);
 		}
-		throw new ResourceFoundException("Book not found");
+		throw new ResourceNotFoundException("Book not found");
 	}
 
 	@Override
-	public ResponseEntity<?> addBook(BookRequestDto dto) {
+	public ResponseEntity<?> addBook(BookDto dto) {
 		// TODO Auto-generated method stub
 		bookRepository.save(modelMapper.map(dto,BookEntity.class));
 		return ResponseEntity.ok(new MessageResponse("The book was added successfully"));
 	}
 
 	@Override
-	public ResponseEntity<?> updateBook(int bookId, BookRequestDto dto) {
+	public ResponseEntity<?> updateBook(int bookId, BookDto dto) {
 		// TODO Auto-generated method stub
 		Optional<BookEntity> optional = bookRepository.findById(bookId);
 		if(optional.isPresent()) {
@@ -73,7 +64,7 @@ public class BookServiceImpl implements BookService{
 			
 			return ResponseEntity.ok(new MessageResponse("The book was updated successfully"));
 		}
-		throw new ResourceFoundException("Book not found");
+		throw new ResourceNotFoundException("Book not found");
 	}
 
 	@Override
@@ -91,7 +82,7 @@ public class BookServiceImpl implements BookService{
 				return ResponseEntity.ok(new MessageResponse("The book deleted successfully")) ;
 			}
 		}
-		throw new ResourceFoundException("The book is not found");
+		throw new ResourceNotFoundException("The book is not found");
 	}
 
 	

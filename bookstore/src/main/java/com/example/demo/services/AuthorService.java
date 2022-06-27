@@ -1,12 +1,12 @@
 package com.example.demo.services;
 
-import java.util.List;
 
-import com.example.demo.dto.request.AuthorRequestDto;
-import com.example.demo.dto.response.AuthorResponseDto;
+import org.springframework.http.ResponseEntity;
+
+import com.example.demo.data.dto.AuthorDto;
 
 public interface AuthorService {
-	public List<AuthorResponseDto> getAllAuthors();
-	public AuthorResponseDto addAuthor(AuthorRequestDto dto);
-	public AuthorResponseDto updateAuthor(Integer authorId, AuthorRequestDto dto);
+	public ResponseEntity<?> getAllAuthors();
+	public ResponseEntity<?> addAuthor(AuthorDto dto);
+	public ResponseEntity<?> updateAuthor(Integer authorId, AuthorDto dto);
 }

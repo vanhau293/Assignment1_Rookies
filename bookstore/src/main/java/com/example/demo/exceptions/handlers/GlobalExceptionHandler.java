@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.example.demo.dto.response.ErrorResponse;
-import com.example.demo.exceptions.ResourceFoundException;
+import com.example.demo.data.dto.ErrorResponse;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.exceptions.UnauthorizedException;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
-	@ExceptionHandler({ResourceFoundException.class})
+	@ExceptionHandler({ResourceNotFoundException.class})
 	protected ResponseEntity<ErrorResponse> handleResourceNotFoundException(RuntimeException exception,
 			WebRequest request) {
 		ErrorResponse error = new ErrorResponse("404", exception.getMessage());

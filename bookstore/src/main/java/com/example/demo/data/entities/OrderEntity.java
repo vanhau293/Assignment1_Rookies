@@ -14,24 +14,26 @@ import lombok.Setter;
 @Getter
 @Setter
 @NamedQueries({
-    @NamedQuery(name = "OrderEntity.findAll", query = "SELECT o FROM OrderEntity o where o.confirmed = true")
-    , @NamedQuery(name = "OrderEntity.findOrdersOfDate", query = "SELECT o FROM OrderEntity o where day(o.createdDate) = :date and o.confirmed = true")
-    , @NamedQuery(name = "OrderEntity.findOrdersPending", query = "SELECT o FROM OrderEntity o WHERE o.confirmed = false")
+    @NamedQuery(name = "OrderEntity.findAll", query = "SELECT o FROM OrderEntity o")
+    , @NamedQuery(name = "OrderEntity.findOrdersWithStatus", query = "SELECT o FROM OrderEntity o where o.statusId.statusId = :statusId")
+    , @NamedQuery(name = "OrderEntity.findOrdersOnDate", query = "SELECT o FROM OrderEntity o where day(o.updateDate) = :date")
+    , @NamedQuery(name = "OrderEntity.findOrders", query = "SELECT o FROM OrderEntity o where day(o.updateDate) = :date and o.statusId = :statusId")
     , @NamedQuery(name = "OrderEntity.findByOrderId", query = "SELECT o FROM OrderEntity o WHERE o.orderId = :orderId")})
 public class OrderEntity {
 	@Id
     @Column(name = "order_id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderId;
-    @Column(name = "confirmed", nullable = false)
-    private boolean confirmed;
-    @Column(name = "created_date", nullable = false)
+    @Column(name = "update_date", nullable = false)
     //@Temporal(TemporalType.TIMESTAMP)
     //@DateTimeFormat(pattern = "HH:mm:ss.SSS dd-MM-yyyy")
-    private LocalDateTime createdDate;
+    private LocalDateTime updateDate;
     @Basic(optional = false)
     @Column(name = "total_cash", nullable = false)
     private long totalCash;
+    @JoinColumn(name = "status_id", referencedColumnName = "status_id")
+    @ManyToOne(optional = false)
+    private StatusEntity statusId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderEntity")
     private Collection<OrderDetailEntity> orderDetailsCollection;
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false)
@@ -45,16 +47,23 @@ public class OrderEntity {
     	super();
     }
 
-    public OrderEntity(Integer orderId) {
+    public StatusEntity getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId(StatusEntity statusId) {
+		this.statusId = statusId;
+	}
+
+	public OrderEntity(Integer orderId) {
 		super();
 		this.orderId = orderId;
 	}
 
-	public OrderEntity(LocalDateTime createdDate, long totalCash, boolean confirmed, EmployeeEntity employeeEntity) {
+	public OrderEntity(LocalDateTime createdDate, long totalCash, EmployeeEntity employeeEntity) {
     	super();
-        this.createdDate = createdDate;
+        this.updateDate = createdDate;
         this.totalCash = totalCash;
-        this.confirmed = confirmed;
         this.employeeId = employeeEntity;
     }
 
@@ -66,20 +75,12 @@ public class OrderEntity {
 		this.orderId = orderId;
 	}
 
-	public boolean isConfirmed() {
-		return confirmed;
-	}
-
-	public void setConfirmed(boolean confirmed) {
-		this.confirmed = confirmed;
-	}
-
 	public LocalDateTime getCreatedDate() {
-		return createdDate;
+		return updateDate;
 	}
 
 	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
+		this.updateDate = createdDate;
 	}
 
 	public long getTotalCash() {

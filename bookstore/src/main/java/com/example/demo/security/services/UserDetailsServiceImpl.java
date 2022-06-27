@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.data.entities.AccountEntity;
-import com.example.demo.data.repositories.AccountRepository;
 import com.example.demo.exceptions.UnauthorizedException;
+import com.example.demo.repositories.AccountRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

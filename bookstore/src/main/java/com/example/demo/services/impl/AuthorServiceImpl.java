@@ -6,15 +6,16 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.data.dto.AuthorDto;
 import com.example.demo.data.entities.AuthorEntity;
 
 
-import com.example.demo.data.repositories.AuthorRepository;
-import com.example.demo.dto.request.AuthorRequestDto;
-import com.example.demo.dto.response.AuthorResponseDto;
-import com.example.demo.exceptions.ResourceFoundException;
+import com.example.demo.repositories.AuthorRepository;
+import com.example.demo.response.MessageResponse;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.services.AuthorService;
 
 @Service
@@ -31,32 +32,36 @@ public class AuthorServiceImpl implements AuthorService{
 	}
 			
 	@Override
-	public List<AuthorResponseDto> getAllAuthors() {
+	public ResponseEntity<?> getAllAuthors() {
 		// TODO Auto-generated method stub
 		List<AuthorEntity> list = authorRepository.findAll();
-		List<AuthorResponseDto> listDto = new ArrayList<AuthorResponseDto>();
-		list.forEach(p -> listDto.add(modelMapper.map(p, AuthorResponseDto.class)));
-		return listDto;
+		List<AuthorDto> listDto = new ArrayList<AuthorDto>();
+		list.forEach(p -> listDto.add(modelMapper.map(p, AuthorDto.class)));
+		return ResponseEntity.ok(listDto);
 	}
 
 	@Override
-	public AuthorResponseDto addAuthor(AuthorRequestDto dto) {
+	public ResponseEntity<?> addAuthor(AuthorDto dto) {
 		// TODO Auto-generated method stub
-		AuthorEntity author = authorRepository.save(modelMapper.map(dto, AuthorEntity.class));
-		return modelMapper.map(author, AuthorResponseDto.class);
+		Optional<AuthorEntity> optional = authorRepository.findByAuthorName(dto.getAuthorName());
+		if(optional.isPresent()) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Author name already exists"));
+		}
+		authorRepository.save(modelMapper.map(dto, AuthorEntity.class));
+		return ResponseEntity.ok(new MessageResponse("Add author successfully"));
 	}
 
 	@Override
-	public AuthorResponseDto updateAuthor(Integer authorId, AuthorRequestDto dto) {
+	public ResponseEntity<?> updateAuthor(Integer authorId, AuthorDto dto) {
 		// TODO Auto-generated method stub
 		Optional<AuthorEntity> authorOptional = authorRepository.findById(authorId);
 		if(authorOptional.isPresent()) {
 			AuthorEntity author = authorOptional.get();
 			modelMapper.map(dto,author);
 			author = authorRepository.save(author);
-			return modelMapper.map(author, AuthorResponseDto.class);
+			return ResponseEntity.ok(new MessageResponse("Update author successfully"));
 		}
-		throw new ResourceFoundException("Author not found");
+		throw new ResourceNotFoundException("Author not found");
 	}
 	
 

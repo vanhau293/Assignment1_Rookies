@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.request.CategoryRequestDto;
-import com.example.demo.dto.response.CategoryResponseDto;
+import com.example.demo.data.dto.CategoryDto;
 import com.example.demo.services.CategoryService;
 
 @RestController
@@ -27,22 +27,18 @@ public class CategoryController {
 	CategoryService categoryService;
 	
 	@GetMapping("")
-	public List<CategoryResponseDto> getAllCategories(){
-		return categoryService.getAllCategories();
-	}
-	
-	@GetMapping("/deleted")
-	public List<CategoryResponseDto> getCategoriesDeleted(){
-		return categoryService.getCategoriesDeleted();
+	public List<CategoryDto> getAllCategories(@RequestParam(value="deleted", required= false) boolean isDeleted){
+		if(isDeleted == false) return categoryService.getAllCategories();
+		else return categoryService.getCategoriesDeleted();
 	}
 	
 	@PostMapping("")
-	public CategoryResponseDto addCategory(@Valid @RequestBody CategoryRequestDto dto) {
+	public CategoryDto addCategory(@Valid @RequestBody CategoryDto dto) {
 		return categoryService.addCategory(dto);
 	}
 	
 	@PutMapping("/{id}")
-	public CategoryResponseDto updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryRequestDto dto) {
+	public CategoryDto updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryDto dto) {
 		return categoryService.updateCategory(id, dto);
 	}
 	

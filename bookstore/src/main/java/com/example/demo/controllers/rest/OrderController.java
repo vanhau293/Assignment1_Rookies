@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.request.OrderRequestDto;
-import com.example.demo.dto.response.OrderResponseDto;
+import com.example.demo.data.dto.OrderDto;
 import com.example.demo.services.OrderService;
 
 
@@ -23,25 +23,26 @@ public class OrderController {
 	@Autowired
 	OrderService orderService;
 	
-	@GetMapping("/on/{date}")
-	public ResponseEntity<?> getOrderOnDate(@PathVariable String date){
-		return orderService.getOrdersOnDate(date);
+	@GetMapping("")
+	public ResponseEntity<?> getOrders(@RequestParam(value = "date", required = false) String date, 
+			@RequestParam(value = "status", required = false) Integer statusId){
+		return orderService.getOrders(date, statusId);
 	}
 	
 	@GetMapping("/{id}")
-	public OrderResponseDto getOrder(@PathVariable Integer id){
+	public OrderDto getOrder(@PathVariable Integer id){
 		return orderService.getOrder(id);
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<?> addOrder(@Valid @RequestBody OrderRequestDto dto){
+	public ResponseEntity<?> addOrder(@Valid @RequestBody OrderDto dto){
 		System.out.println("hi");
 		return orderService.addOrder(dto);
 	}
 	
 	@GetMapping("/pending")
 	public ResponseEntity<?> getOrdersPending(){
-		return orderService.getOrdersPending();
+		return null;
 	}
 	
 	@PutMapping("/{id}")

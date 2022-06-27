@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import com.example.demo.dto.request.CategoryRequestDto;
-import com.example.demo.dto.response.CategoryResponseDto;
+import com.example.demo.data.dto.CategoryDto;
 
 public interface CategoryService {
-	public List<CategoryResponseDto> getAllCategories();
-	public List<CategoryResponseDto> getCategoriesDeleted();
-	public CategoryResponseDto addCategory(CategoryRequestDto dto);
-	public CategoryResponseDto updateCategory(Integer id, CategoryRequestDto dto);
+	public List<CategoryDto> getAllCategories();
+	public List<CategoryDto> getCategoriesDeleted();
+	public CategoryDto addCategory(CategoryDto dto);
+	public CategoryDto updateCategory(Integer id, CategoryDto dto);
 	public ResponseEntity<?> deleteCategory(Integer id);
 }
