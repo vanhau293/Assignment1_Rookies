@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.data.dto.OrderDto;
+import com.example.demo.data.dto.UpdateOrderDto;
 import com.example.demo.services.OrderService;
 
 
@@ -31,7 +32,7 @@ public class OrderController {
 	
 	@GetMapping("/{id}")
 	public OrderDto getOrder(@PathVariable Integer id){
-		return orderService.getOrder(id);
+		return orderService.getOrderById(id);
 	}
 	
 	@PostMapping("")
@@ -40,14 +41,10 @@ public class OrderController {
 		return orderService.addOrder(dto);
 	}
 	
-	@GetMapping("/pending")
-	public ResponseEntity<?> getOrdersPending(){
-		return null;
-	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> confirmOrder(@PathVariable Integer id){
-		return orderService.confirmOrder(id);
+	public ResponseEntity<?> updateOrder(@PathVariable Integer id, @Valid @RequestBody UpdateOrderDto dto){
+		return orderService.updateOrder(id, dto);
 	}
 	
 }

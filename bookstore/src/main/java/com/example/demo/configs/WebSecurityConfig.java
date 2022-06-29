@@ -2,6 +2,7 @@ package com.example.demo.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -65,8 +66,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
-            	.antMatchers("/books/**", "/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-//            	.antMatchers().permitAll()
+            .antMatchers("/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+            
+            .antMatchers(HttpMethod.DELETE,"/accounts").hasAuthority("ADMIN")
+            .antMatchers(HttpMethod.GET,"/orders").hasAuthority("ADMIN")
+            .antMatchers("/authors/**", "/books/**", "categories/**").hasAuthority("ADMIN")
+            
+            .antMatchers("/customers/**").hasAuthority("Customer")
+        	.antMatchers(HttpMethod.PUT,"/accounts").hasAuthority("Customer")
+        	.antMatchers(HttpMethod.GET,"/authors").hasAuthority("Customer")
+        	.antMatchers(HttpMethod.GET,"/books").hasAuthority("Customer")
+        	.antMatchers(HttpMethod.GET,"/categories").hasAuthority("Customer")
+        	.antMatchers(HttpMethod.GET,"/orders/{id}").hasAuthority("Customer")
+        	.antMatchers(HttpMethod.POST,"/orders").hasAuthority("Customer")
+            
             .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

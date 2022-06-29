@@ -11,9 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.data.dto.OrderDetailsDto;
 import com.example.demo.data.dto.OrderDto;
+import com.example.demo.data.dto.UpdateOrderDto;
+import com.example.demo.data.entities.OrderDetailEntity;
+import com.example.demo.data.entities.OrderDetailPK;
 import com.example.demo.data.entities.OrderEntity;
 import com.example.demo.repositories.BookRepository;
+import com.example.demo.repositories.OrderDetailRepository;
 import com.example.demo.repositories.OrderRepository;
 import com.example.demo.response.MessageResponse;
 import com.example.demo.exceptions.ResourceNotFoundException;
@@ -22,12 +27,14 @@ import com.example.demo.services.OrderService;
 public class OrderServiceImpl implements OrderService{
 
 	OrderRepository orderRepository;
+	OrderDetailRepository orderDetailRepository;
 	BookRepository bookRepository;
 	ModelMapper modelMapper;
 	
 	@Autowired
-	public OrderServiceImpl(BookRepository bookRepository, OrderRepository orderRepository, ModelMapper modelMapper) {
+	public OrderServiceImpl(BookRepository bookRepository, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ModelMapper modelMapper) {
 		// TODO Auto-generated constructor stub
+		this.orderDetailRepository = orderDetailRepository;
 		this.bookRepository = bookRepository;
 		this.orderRepository = orderRepository;
 		this.modelMapper = modelMapper;
@@ -36,6 +43,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public ResponseEntity<?> getOrders(String date, Integer statusId) {
 		// TODO Auto-generated method stub
+		System.out.println(date);
 		if(date == null && statusId == null) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Please enter param: date or statusId"));
 		}
@@ -43,8 +51,10 @@ public class OrderServiceImpl implements OrderService{
 		
 		if(date == null)
 			list = orderRepository.findOrdersWithStatus(statusId);
-		else if(statusId == null)
-			list = orderRepository.findOrdersOnDate(date);
+		else if(statusId == null) {
+			String split[] = date.split("-"); // date dd/MM/yyyy
+			list = orderRepository.findOrdersOnDate(Integer.parseInt(split[0]),Integer.parseInt(split[1]),Integer.parseInt(split[2]));
+		}
 		else 
 			list = orderRepository.findOrders(date, statusId);
 		
@@ -57,7 +67,7 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public OrderDto getOrder(Integer id) {
+	public OrderDto getOrderById(Integer id) {
 		// TODO Auto-generated method stub
 		Optional<OrderEntity> optional = orderRepository.findById(id);
 		if(!optional.isPresent()) {
@@ -72,47 +82,32 @@ public class OrderServiceImpl implements OrderService{
 	public ResponseEntity<?> addOrder(OrderDto dto) {
 		// TODO Auto-generated method stub
 		OrderEntity order = modelMapper.map(dto, OrderEntity.class);
-		
-//		for(OrderDetailsDto detailDto : dto.getOrderDetails()) {
-//			OrderDetailEntity detail = new OrderDetailEntity(Integer.parseInt(detailDto.getQuantity()), Long.parseLong(detailDto.getUnitPrice()));
-//			Optional<BookEntity> optional = bookRepository.findById(Integer.parseInt(detailDto.getBookId()));
-//			if(!optional.isPresent()) {
-//				throw new ResourceNotFoundException("BookId : "+detailDto.getBookId()+" not found");
-//			}
-//			detail.setBookEntity(optional.get());
-//			order.getOrderDetailsCollection().add(detail);
-//		}
 		order = orderRepository.save(order);
-		return ResponseEntity.ok(new MessageResponse("The book was added successfully"));
+		List<OrderDetailEntity> details = new ArrayList<>();
+		OrderDetailEntity detail;
+		for(OrderDetailsDto s : dto.getOrderDetails()) {
+			detail = modelMapper.map(s, OrderDetailEntity.class);
+			detail.setOrderDetailPK(new OrderDetailPK(order.getOrderId(), s.getBookEntity().getBookId()));
+			details.add(detail);
+		}
+		orderDetailRepository.saveAll(details);
+		return ResponseEntity.ok(new MessageResponse("The order was added successfully"));
 	}
 
 	@Override
-	public ResponseEntity<?> confirmOrder(Integer id) {
+	public ResponseEntity<?> updateOrder(Integer id, UpdateOrderDto dto) {
 		// TODO Auto-generated method stub
 		Optional<OrderEntity> optional = orderRepository.findById(id);
 		if(!optional.isPresent()) {
 			throw new ResourceNotFoundException("Order not found");
 		}
+		OrderEntity order = optional.get();
+		order.setStatusId(null);
+		modelMapper.map(dto, order);
 		
-//		OrderEntity order = optional.get();
-//		if(order.isConfirmed()) {
-//			return ResponseEntity.badRequest().body(new MessageResponse("The order has been confirmed before"));
-//		}
-//		order.setConfirmed(true);
-//		orderRepository.save(order);
-		return ResponseEntity.ok(new MessageResponse("Confirm order successfully"));
+		orderRepository.save(order);
+		return ResponseEntity.ok(new MessageResponse("Update order successfully"));
 	}
 
-//	@Override
-//	public ResponseEntity<?> getOrdersPending() {
-//		// TODO Auto-generated method stub
-//		List<OrderEntity> list = orderRepository.findOrdersPending();
-//		if(list.size()==0) {
-//			return ResponseEntity.ok(new MessageResponse("No pending orders"));
-//		}
-//		List<OrderResponseDto> listDto = new ArrayList<OrderResponseDto>();
-//		list.forEach(o -> listDto.add(modelMapper.map(o, OrderResponseDto.class)));
-//		return ResponseEntity.ok(listDto);
-//	}
 
 }

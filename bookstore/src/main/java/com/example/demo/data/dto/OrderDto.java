@@ -1,5 +1,6 @@
 package com.example.demo.data.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.constraints.Min;
@@ -9,10 +10,11 @@ import javax.validation.constraints.Pattern;
 public class OrderDto {
 	private Integer orderId;
 	private StatusDto statusId;
-	@NotEmpty(message = "CustomerId must not be empty")
-	//@Pattern(regexp = "\\d{2}:\\d{2}:\\d{2}.\\d* \\d{2}[-|/]\\d{2}[-|/]\\d{4}", 
-	//message = "Created date must be a day like (HH:mm:ss.SSS dd/MM/yyyy) or (HH:mm:ss.SSS dd-MM-yyyy)")
-	private String createdDate;
+	@NotEmpty(message = "UpdateDate must not be empty")
+	//2022-06-28T12:25:32.020
+	@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d*", 
+	message = "Created date must be a day like (yyyy-MM-ddTHH:mm:ss.SSS)")
+	private String updateDate;
 	@NotEmpty(message = "Total cash must not be empty")
 	@Min(value = 0, message = "Total cash >= 0")
 	@Pattern(regexp = "\\d*", message = "Total cash must be a number")
@@ -42,11 +44,13 @@ public class OrderDto {
 	public void setOrderDetails(List<OrderDetailsDto> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
-	public String getCreatedDate() {
-		return createdDate;
+	public LocalDateTime getUpdateDate(){
+
+		return LocalDateTime.parse(updateDate);
+	
 	}
-	public void setCreatedDate(String createdDate) {
-		this.createdDate = createdDate;
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 	public String getTotalCash() {
 		return totalCash;

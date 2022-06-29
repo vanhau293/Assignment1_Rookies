@@ -3,7 +3,6 @@ package com.example.demo.data.entities;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-
 import javax.persistence.*;
 
 
@@ -16,8 +15,8 @@ import lombok.Setter;
 @NamedQueries({
     @NamedQuery(name = "OrderEntity.findAll", query = "SELECT o FROM OrderEntity o")
     , @NamedQuery(name = "OrderEntity.findOrdersWithStatus", query = "SELECT o FROM OrderEntity o where o.statusId.statusId = :statusId")
-    , @NamedQuery(name = "OrderEntity.findOrdersOnDate", query = "SELECT o FROM OrderEntity o where day(o.updateDate) = :date")
-    , @NamedQuery(name = "OrderEntity.findOrders", query = "SELECT o FROM OrderEntity o where day(o.updateDate) = :date and o.statusId = :statusId")
+    , @NamedQuery(name = "OrderEntity.findOrdersOnDate", query = "SELECT o FROM OrderEntity o where DAY(o.updateDate) = :day and MONTH(o.updateDate) = :month and year(o.updateDate) = :year")
+    , @NamedQuery(name = "OrderEntity.findOrders", query = "SELECT o FROM OrderEntity o where o.updateDate = :date and o.statusId = :statusId")
     , @NamedQuery(name = "OrderEntity.findByOrderId", query = "SELECT o FROM OrderEntity o WHERE o.orderId = :orderId")})
 public class OrderEntity {
 	@Id
@@ -60,9 +59,9 @@ public class OrderEntity {
 		this.orderId = orderId;
 	}
 
-	public OrderEntity(LocalDateTime createdDate, long totalCash, EmployeeEntity employeeEntity) {
+	public OrderEntity(LocalDateTime updateDate, long totalCash, EmployeeEntity employeeEntity) {
     	super();
-        this.updateDate = createdDate;
+        this.updateDate = updateDate;
         this.totalCash = totalCash;
         this.employeeId = employeeEntity;
     }
@@ -75,12 +74,12 @@ public class OrderEntity {
 		this.orderId = orderId;
 	}
 
-	public LocalDateTime getCreatedDate() {
+	public LocalDateTime getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.updateDate = createdDate;
+	public void setUpdateDate(LocalDateTime updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public long getTotalCash() {
