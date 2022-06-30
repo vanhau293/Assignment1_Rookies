@@ -1,5 +1,7 @@
 package com.example.demo.data.entities;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +21,10 @@ public class ReviewEntity {
     private String comment;
     @Column(name = "star_rating", nullable = false)
     private int starRating;
+    @Column(name = "created_date", nullable = false)
+    //@Temporal(TemporalType.TIMESTAMP)
+    //@DateTimeFormat(pattern = "HH:mm:ss.SSS dd-MM-yyyy")
+    private LocalDateTime createdDate;
     @JoinColumn(name = "book_id", referencedColumnName = "book_id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private BookEntity bookEntity;

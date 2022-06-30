@@ -25,5 +25,21 @@ public class ReviewPK implements Serializable {
 		this.customerId = customerId;
 		this.bookId = bookId;
 	}
+	public int getBookId() {
+		return bookId;
+	}
+	public void setBookId(int bookId) {
+		this.bookId = bookId;
+	}
+	public int getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
     
 }

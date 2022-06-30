@@ -18,7 +18,7 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "status", uniqueConstraints = {
 	    @UniqueConstraint(columnNames = {"status_name"})})
 @NamedQueries({
-    @NamedQuery(name = "StatusEntity.findOrders", query = "SELECT s.ordersCollection FROM StatusEntity s where s.statusName = :statusName")})
+    @NamedQuery(name = "StatusEntity.findOrdersByStatus", query = "SELECT s.ordersCollection FROM StatusEntity s where s.statusName = :statusName")})
 public class StatusEntity {
 	@Id
     @Column(name = "status_id", nullable = false)

@@ -47,4 +47,9 @@ public class OrderController {
 		return orderService.updateOrder(id, dto);
 	}
 	
+	@GetMapping("/status")
+	public ResponseEntity<?> getAllStatus(){
+		return ResponseEntity.ok(null);
+	}
+	
 }

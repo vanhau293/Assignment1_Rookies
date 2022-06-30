@@ -5,26 +5,23 @@ import javax.validation.constraints.NotEmpty;
 public class AuthorDto {
 		
 	
-	private String authorId;
+	public String authorId;
 	@NotEmpty(message = "Author Name must not be empty")
 	private String authorName;
-	
-
-	public String getAuthorId() {
-		return authorId;
-	}
 
 	public void setAuthorId(String authorId) {
 		this.authorId = authorId;
+	}
+
+
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
 	}
 
 	public String getAuthorName() {
 		return authorName;
 	}
 
-	public void setAuthorName(String authorName) {
-		this.authorName = authorName;
-	}
 
 	public AuthorDto(String authorId, @NotEmpty(message = "Author Name must not be empty") String authorName) {
 		super();

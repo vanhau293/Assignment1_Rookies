@@ -10,7 +10,8 @@ import lombok.Setter;
 @Setter
 @NamedQueries({
     @NamedQuery(name = "CartEntity.findAll", query = "SELECT c FROM CartEntity c")
-    , @NamedQuery(name = "CartEntity.findByCustomerId", query = "SELECT c FROM CartEntity c WHERE c.cartPK.customerId = :customerId")})
+    , @NamedQuery(name = "CartEntity.findByCustomerId", query = "SELECT c FROM CartEntity c WHERE c.cartPK.customerId = :customerId")
+    , @NamedQuery(name = "CartEntity.findByCartPK", query = "SELECT c FROM CartEntity c WHERE c.cartPK = :cartPK")})
 public class CartEntity {
 	@EmbeddedId
     protected CartPK cartPK;
@@ -35,6 +36,30 @@ public class CartEntity {
 	public CartEntity(CartPK cartPK) {
 		super();
 		this.cartPK = cartPK;
+	}
+	public CartPK getCartPK() {
+		return cartPK;
+	}
+	public void setCartPK(CartPK cartPK) {
+		this.cartPK = cartPK;
+	}
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	public BookEntity getBookEntity() {
+		return bookEntity;
+	}
+	public void setBookEntity(BookEntity bookEntity) {
+		this.bookEntity = bookEntity;
+	}
+	public CustomerEntity getCustomerEntity() {
+		return customerEntity;
+	}
+	public void setCustomerEntity(CustomerEntity customerEntity) {
+		this.customerEntity = customerEntity;
 	}
     
     

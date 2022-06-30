@@ -13,7 +13,7 @@ public class OrderDto {
 	@NotEmpty(message = "UpdateDate must not be empty")
 	//2022-06-28T12:25:32.020
 	@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d*", 
-	message = "Created date must be a day like (yyyy-MM-ddTHH:mm:ss.SSS)")
+	message = "Updated date must be a day like (yyyy-MM-ddTHH:mm:ss.SSS)")
 	private String updateDate;
 	@NotEmpty(message = "Total cash must not be empty")
 	@Min(value = 0, message = "Total cash >= 0")

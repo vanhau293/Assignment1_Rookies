@@ -4,6 +4,7 @@ package com.example.demo.services;
 import org.springframework.http.ResponseEntity;
 
 import com.example.demo.data.dto.BookDto;
+import com.example.demo.data.dto.ReviewDto;
 
 
 public interface BookService {
@@ -13,4 +14,6 @@ public interface BookService {
 	public ResponseEntity<?> updateBook(int bookId, BookDto book);
 	public ResponseEntity<?> deleteBook(int bookId);
 	
+	public ResponseEntity<?> getAllReviews(int bookId);
+	public ResponseEntity<?> addReview(ReviewDto dto);
 }

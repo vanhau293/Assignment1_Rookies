@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 
 
 public class BookDto {// use add book
-	private Integer bookId;
+	public Integer bookId;
 	@NotEmpty(message = "Book title must not be empty")
 	private String bookTitle;
 	@NotEmpty(message = "Publisher must not be empty")
@@ -30,10 +30,6 @@ public class BookDto {// use add book
     private AuthorDto authorId;
     private Float avgRating;
 	
-	
-	public Integer getBookId() {
-		return bookId;
-	}
 	public void setBookId(Integer bookId) {
 		this.bookId = bookId;
 	}

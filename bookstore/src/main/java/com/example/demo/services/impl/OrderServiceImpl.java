@@ -13,13 +13,15 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.data.dto.OrderDetailsDto;
 import com.example.demo.data.dto.OrderDto;
+import com.example.demo.data.dto.StatusDto;
 import com.example.demo.data.dto.UpdateOrderDto;
 import com.example.demo.data.entities.OrderDetailEntity;
 import com.example.demo.data.entities.OrderDetailPK;
 import com.example.demo.data.entities.OrderEntity;
-import com.example.demo.repositories.BookRepository;
+import com.example.demo.data.entities.StatusEntity;
 import com.example.demo.repositories.OrderDetailRepository;
 import com.example.demo.repositories.OrderRepository;
+import com.example.demo.repositories.StatusRepository;
 import com.example.demo.response.MessageResponse;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.services.OrderService;
@@ -28,14 +30,14 @@ public class OrderServiceImpl implements OrderService{
 
 	OrderRepository orderRepository;
 	OrderDetailRepository orderDetailRepository;
-	BookRepository bookRepository;
+	StatusRepository statusRepository;
 	ModelMapper modelMapper;
 	
 	@Autowired
-	public OrderServiceImpl(BookRepository bookRepository, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ModelMapper modelMapper) {
+	public OrderServiceImpl(StatusRepository statusRepository, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ModelMapper modelMapper) {
 		// TODO Auto-generated constructor stub
 		this.orderDetailRepository = orderDetailRepository;
-		this.bookRepository = bookRepository;
+		this.statusRepository = statusRepository;
 		this.orderRepository = orderRepository;
 		this.modelMapper = modelMapper;
 	}
@@ -87,7 +89,7 @@ public class OrderServiceImpl implements OrderService{
 		OrderDetailEntity detail;
 		for(OrderDetailsDto s : dto.getOrderDetails()) {
 			detail = modelMapper.map(s, OrderDetailEntity.class);
-			detail.setOrderDetailPK(new OrderDetailPK(order.getOrderId(), s.getBookEntity().getBookId()));
+			detail.setOrderDetailPK(new OrderDetailPK(order.getOrderId(), s.getBookEntity().bookId));
 			details.add(detail);
 		}
 		orderDetailRepository.saveAll(details);
@@ -107,6 +109,16 @@ public class OrderServiceImpl implements OrderService{
 		
 		orderRepository.save(order);
 		return ResponseEntity.ok(new MessageResponse("Update order successfully"));
+	}
+
+	@Override
+	public ResponseEntity<?> getAllStatus() {
+		// TODO Auto-generated method stub
+		List<StatusEntity> list = statusRepository.findAll();
+		List<StatusDto> listDto = new ArrayList<StatusDto>();
+		list.forEach(s -> listDto.add(modelMapper.map(s, StatusDto.class)));
+		
+		return ResponseEntity.ok(listDto);
 	}
 
 

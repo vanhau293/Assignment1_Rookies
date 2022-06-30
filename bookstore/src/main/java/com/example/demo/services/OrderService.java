@@ -12,4 +12,6 @@ public interface OrderService {
 	public OrderDto getOrderById(Integer id);
 	public ResponseEntity<?> addOrder(OrderDto dto);
 	public ResponseEntity<?> updateOrder(Integer id, UpdateOrderDto dto);
+	
+	public ResponseEntity<?> getAllStatus();
 }

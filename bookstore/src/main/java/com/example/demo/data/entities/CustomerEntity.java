@@ -16,7 +16,7 @@ import lombok.Setter;
     @NamedQuery(name = "CustomerEntity.findAll", query = "SELECT c FROM CustomerEntity c")
     , @NamedQuery(name = "CustomerEntity.findByCustomerId", query = "SELECT c FROM CustomerEntity c WHERE c.customerId = :customerId")
     , @NamedQuery(name = "CustomerEntity.findByPhoneNumber", query = "SELECT c FROM CustomerEntity c WHERE c.phoneNumber = :phoneNumber")
-    , @NamedQuery(name = "CustomerEntity.findByEmail", query = "SELECT c FROM CustomerEntity c WHERE c.email = :email")})
+    , @NamedQuery(name = "CustomerEntity.findCartByCustomerId", query = "SELECT c.cartCollection FROM CustomerEntity c WHERE c.customerId = :customerId")})
 public class CustomerEntity {
 	@Id
     @Column(name = "customer_id", nullable = false)

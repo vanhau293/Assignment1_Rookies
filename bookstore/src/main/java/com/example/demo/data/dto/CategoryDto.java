@@ -3,11 +3,11 @@ package com.example.demo.data.dto;
 import javax.validation.constraints.NotEmpty;
 
 public class CategoryDto {
-	private String categoryId;
+	public String categoryId;
 	@NotEmpty(message = "Category name must not be empty")
 	private String categoryName;
 
-	private boolean deleted;
+	public boolean deleted;
 	
 	public String getCategoryName() {
 		return categoryName;
@@ -25,9 +25,6 @@ public class CategoryDto {
 		this.deleted = deleted;
 	}
 
-	public String getCategoryId() {
-		return categoryId;
-	}
 
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
