@@ -6,7 +6,7 @@ import javax.validation.constraints.Pattern;
 
 public class OrderDetailsDto {
 	@NotEmpty(message = "Book must not be empty")
-	private BookDto bookEntity;
+	private BookForeignDto bookEntity;
 	@NotEmpty(message = "Quantity must not be empty")
 	@Pattern(regexp = "\\d*", message = "Quantity must be a number")
 	private String quantity;
@@ -25,10 +25,10 @@ public class OrderDetailsDto {
 	public void setUnitPrice(String unitPrice) {
 		this.unitPrice = unitPrice;
 	}
-	public BookDto getBookEntity() {
+	public BookForeignDto getBookEntity() {
 		return bookEntity;
 	}
-	public void setBookEntity(BookDto bookEntity) {
+	public void setBookEntity(BookForeignDto bookEntity) {
 		this.bookEntity = bookEntity;
 	}
 }

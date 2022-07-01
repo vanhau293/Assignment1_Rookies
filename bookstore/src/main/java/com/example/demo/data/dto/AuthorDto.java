@@ -1,10 +1,11 @@
 package com.example.demo.data.dto;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 public class AuthorDto {
 		
-	
+	@Pattern(regexp = "\\d*", message = "AuthorId must be a number")
 	public String authorId;
 	@NotEmpty(message = "Author Name must not be empty")
 	private String authorName;

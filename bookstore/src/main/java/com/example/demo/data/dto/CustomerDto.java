@@ -6,7 +6,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class CustomerDto {
-	public Integer customerId;
+	@Pattern(regexp = "\\d*", message = "CustomerId must be a number")
+	public String customerId;
 	@NotEmpty(message = "Name must not be empty")
 	@Size(max = 255, message = "The length of the name must be less than 255 characters")
 	private String name;
@@ -43,7 +44,7 @@ public class CustomerDto {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public void setCustomerId(Integer customerId) {
+	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
 	

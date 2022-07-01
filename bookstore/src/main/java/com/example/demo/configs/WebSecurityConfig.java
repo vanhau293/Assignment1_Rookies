@@ -70,17 +70,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             
             .antMatchers(HttpMethod.DELETE,"/accounts").hasAuthority("ADMIN")
             .antMatchers(HttpMethod.GET,"/orders").hasAuthority("ADMIN")
-            .antMatchers("/authors/**", "/books/**", "categories/**").hasAuthority("ADMIN")
-            
+            .antMatchers(HttpMethod.POST,"/authors").hasAuthority("ADMIN")
+            .antMatchers(HttpMethod.PUT,"/authors/{id}").hasAuthority("ADMIN")
+        	.antMatchers(HttpMethod.POST,"/books").hasAuthority("ADMIN")
+        	.antMatchers(HttpMethod.PUT,"/books/{id}").hasAuthority("ADMIN")
+        	.antMatchers(HttpMethod.DELETE,"/books/{id}").hasAuthority("ADMIN")
+        	.antMatchers(HttpMethod.POST,"/categories").hasAuthority("ADMIN")
+        	.antMatchers(HttpMethod.PUT,"/categories/{id}").hasAuthority("ADMIN")
+        	.antMatchers(HttpMethod.DELETE,"/categories/{id}").hasAuthority("ADMIN")
+        	.antMatchers(HttpMethod.GET,"/orders").hasAuthority("ADMIN")
             
         	.antMatchers(HttpMethod.PUT,"/accounts").hasAuthority("Customer")
-        	.antMatchers(HttpMethod.GET,"/authors").hasAuthority("Customer")
-        	.antMatchers(HttpMethod.GET,"/books").hasAuthority("Customer")
-        	.antMatchers(HttpMethod.GET,"/categories").hasAuthority("Customer")
-        	.antMatchers(HttpMethod.GET,"/orders/{id}").hasAuthority("Customer")
         	.antMatchers(HttpMethod.POST,"/orders").hasAuthority("Customer")
         	.antMatchers("/customers/**").hasAuthority("Customer")
-            
+        	
             .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -15,10 +15,14 @@ import com.example.demo.data.dto.OrderDetailsDto;
 import com.example.demo.data.dto.OrderDto;
 import com.example.demo.data.dto.StatusDto;
 import com.example.demo.data.dto.UpdateOrderDto;
+import com.example.demo.data.entities.BookEntity;
+import com.example.demo.data.entities.EmployeeEntity;
 import com.example.demo.data.entities.OrderDetailEntity;
 import com.example.demo.data.entities.OrderDetailPK;
 import com.example.demo.data.entities.OrderEntity;
 import com.example.demo.data.entities.StatusEntity;
+import com.example.demo.repositories.BookRepository;
+import com.example.demo.repositories.EmployeeRepository;
 import com.example.demo.repositories.OrderDetailRepository;
 import com.example.demo.repositories.OrderRepository;
 import com.example.demo.repositories.StatusRepository;
@@ -31,14 +35,19 @@ public class OrderServiceImpl implements OrderService{
 	OrderRepository orderRepository;
 	OrderDetailRepository orderDetailRepository;
 	StatusRepository statusRepository;
+	EmployeeRepository employeeRepository;
+	BookRepository bookRepository;
 	ModelMapper modelMapper;
 	
 	@Autowired
-	public OrderServiceImpl(StatusRepository statusRepository, OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ModelMapper modelMapper) {
+	public OrderServiceImpl(StatusRepository statusRepository, BookRepository bookRepository, EmployeeRepository employeeRepository,
+			OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ModelMapper modelMapper) {
 		// TODO Auto-generated constructor stub
 		this.orderDetailRepository = orderDetailRepository;
 		this.statusRepository = statusRepository;
 		this.orderRepository = orderRepository;
+		this.bookRepository = bookRepository;
+		this.employeeRepository = employeeRepository;
 		this.modelMapper = modelMapper;
 	}
 	
@@ -84,12 +93,22 @@ public class OrderServiceImpl implements OrderService{
 	public ResponseEntity<?> addOrder(OrderDto dto) {
 		// TODO Auto-generated method stub
 		OrderEntity order = modelMapper.map(dto, OrderEntity.class);
+		Optional<StatusEntity> optionalStatus = statusRepository.findById(1);
+		if(optionalStatus.isPresent()) {
+			throw new ResourceNotFoundException("Status 1 not found");
+		}
+		order.setStatusId(optionalStatus.get());
 		order = orderRepository.save(order);
 		List<OrderDetailEntity> details = new ArrayList<>();
 		OrderDetailEntity detail;
 		for(OrderDetailsDto s : dto.getOrderDetails()) {
+			Integer bookId =Integer.parseInt( s.getBookEntity().getBookId());
+			Optional<BookEntity> optionalBook = bookRepository.findById(bookId);
+			if(!optionalBook.isPresent()) {
+				throw new ResourceNotFoundException("BookId: " + " not found");
+			}
 			detail = modelMapper.map(s, OrderDetailEntity.class);
-			detail.setOrderDetailPK(new OrderDetailPK(order.getOrderId(), s.getBookEntity().bookId));
+			detail.setOrderDetailPK(new OrderDetailPK(order.getOrderId(),bookId));
 			details.add(detail);
 		}
 		orderDetailRepository.saveAll(details);
@@ -99,16 +118,29 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public ResponseEntity<?> updateOrder(Integer id, UpdateOrderDto dto) {
 		// TODO Auto-generated method stub
-		Optional<OrderEntity> optional = orderRepository.findById(id);
-		if(!optional.isPresent()) {
+		Optional<OrderEntity> optionalOrder = orderRepository.findById(id);
+		if(!optionalOrder.isPresent()) {
 			throw new ResourceNotFoundException("Order not found");
 		}
-		OrderEntity order = optional.get();
-		order.setStatusId(null);
-		modelMapper.map(dto, order);
-		
-		orderRepository.save(order);
-		return ResponseEntity.ok(new MessageResponse("Update order successfully"));
+		Optional<StatusEntity> optionalStatus = statusRepository.findById(dto.getStatusId().getStatusId());
+		if(optionalStatus.isPresent()) {
+			throw new ResourceNotFoundException("StatusId not found");
+		}
+		Optional<EmployeeEntity> optionalEmployee = employeeRepository.findById(Integer.parseInt(dto.getEmployeeId().getEmployeeId()));
+		if(optionalEmployee.isPresent()) {
+			throw new ResourceNotFoundException("EmployId not found");
+		}
+		OrderEntity order = optionalOrder.get();
+		if(order.getStatusId().getStatusId()==1 && 
+				(dto.getStatusId().getStatusId()==2 || dto.getStatusId().getStatusId()==3)) {// chỉ được cập nhật khi đang chờ xác nhận
+			order.setStatusId(null);
+			order.setEmployeeId(null);
+			modelMapper.map(dto, order);
+			
+			orderRepository.save(order);
+			return ResponseEntity.ok(new MessageResponse("Update order successfully"));
+		}
+		return ResponseEntity.badRequest().body(new MessageResponse("Updates are not allowed once the order has been confirmed or canceled"));
 	}
 
 	@Override

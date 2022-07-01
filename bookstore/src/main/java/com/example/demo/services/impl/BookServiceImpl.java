@@ -70,13 +70,13 @@ public class BookServiceImpl implements BookService{
 	@Override
 	public ResponseEntity<?> addBook(BookDto dto) {
 		// TODO Auto-generated method stub
-		Optional<CategoryEntity> optionalCategory = categoryRepository.findByCategoryName(dto.getCategoryId().getCategoryName());
+		Optional<CategoryEntity> optionalCategory = categoryRepository.findById(Integer.parseInt(dto.getCategoryId().getCategoryId()));
 		if(!optionalCategory.isPresent()) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Category Name not found"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Category not found"));
 		}
-		Optional<AuthorEntity> optionalAuthor = authorRepository.findByAuthorName(dto.getAuthorId().getAuthorName());
+		Optional<AuthorEntity> optionalAuthor = authorRepository.findById(Integer.parseInt(dto.getAuthorId().getAuthorId()));
 		if(!optionalAuthor.isPresent()) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Author Name not found"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Author not found"));
 		}
 		Optional<BookEntity> optional = bookRepository.findByBookTitle(dto.getBookTitle().trim());
 		if(optional.isPresent()) {
@@ -93,11 +93,11 @@ public class BookServiceImpl implements BookService{
 		if(!optionalBook.isPresent()) {
 			throw new ResourceNotFoundException("Book not found");
 		}
-		Optional<CategoryEntity> optionalCategory = categoryRepository.findByCategoryName(dto.getCategoryId().getCategoryName());
+		Optional<CategoryEntity> optionalCategory = categoryRepository.findById(Integer.parseInt(dto.getCategoryId().getCategoryId()));
 		if(!optionalCategory.isPresent()) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Category not found"));
 		}
-		Optional<AuthorEntity> optionalAuthor = authorRepository.findByAuthorName(dto.getAuthorId().getAuthorName());
+		Optional<AuthorEntity> optionalAuthor = authorRepository.findById(Integer.parseInt(dto.getAuthorId().getAuthorId()));
 		if(!optionalAuthor.isPresent()) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Author not found"));
 		}

@@ -7,6 +7,8 @@ import javax.validation.constraints.Pattern;
 
 
 public class BookDto {// use add book
+	//@NotEmpty(message = "BookId must not be empty")
+	@Pattern(regexp = "\\d*", message = "BookId must be a number")
 	public Integer bookId;
 	@NotEmpty(message = "Book title must not be empty")
 	private String bookTitle;
@@ -25,9 +27,9 @@ public class BookDto {// use add book
 	private String totalPage;
     private boolean inStock;
     @NotNull(message = "Category must not be null")
-    private CategoryDto categoryId;
+    private CategoryForeignDto categoryId;
     @NotNull(message = "Author must not be null")
-    private AuthorDto authorId;
+    private AuthorForeignDto authorId;
     private Float avgRating;
 	
 	public void setBookId(Integer bookId) {
@@ -39,16 +41,17 @@ public class BookDto {// use add book
 	public void setAvgRating(Float avgRating) {
 		this.avgRating = avgRating;
 	}
-	public CategoryDto getCategoryId() {
+	
+	public CategoryForeignDto getCategoryId() {
 		return categoryId;
 	}
-	public void setCategoryId(CategoryDto categoryId) {
+	public void setCategoryId(CategoryForeignDto categoryId) {
 		this.categoryId = categoryId;
 	}
-	public AuthorDto getAuthorId() {
+	public AuthorForeignDto getAuthorId() {
 		return authorId;
 	}
-	public void setAuthorId(AuthorDto authorId) {
+	public void setAuthorId(AuthorForeignDto authorId) {
 		this.authorId = authorId;
 	}
 	public boolean isInStock() {

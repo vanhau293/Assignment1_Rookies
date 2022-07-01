@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.data.dto.BookDto;
+import com.example.demo.data.dto.ReviewDto;
 import com.example.demo.services.BookService;
 
 @RestController
@@ -48,6 +49,15 @@ public class BookController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteBook(@PathVariable Integer id) {
 		return bookService.deleteBook(id);
+	}
+	
+	@GetMapping("/{id}/reviews")
+	public ResponseEntity<?> getAllReviews(@PathVariable Integer id){
+		return bookService.getAllReviews(id);
+	}
+	@PostMapping("/reviews")
+	public ResponseEntity<?> addReview(@RequestBody ReviewDto dto){
+		return bookService.addReview(dto);
 	}
 	
 }

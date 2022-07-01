@@ -8,8 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 public class OrderDto {
+	@Pattern(regexp = "\\d*", message = "OrderId must be a number")
 	private Integer orderId;
-	private StatusDto statusId;
+	public StatusDto statusId;
 	@NotEmpty(message = "UpdateDate must not be empty")
 	//2022-06-28T12:25:32.020
 	@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d*", 
@@ -19,8 +20,8 @@ public class OrderDto {
 	@Min(value = 0, message = "Total cash >= 0")
 	@Pattern(regexp = "\\d*", message = "Total cash must be a number")
 	private String totalCash;
-	private CustomerDto customerId;
-	private EmployeeDto employeeId;
+	private CustomerForeignDto customerId;
+	private EmployeeForeignDto employeeId;
 	private List<OrderDetailsDto> orderDetails;
 	
 	public Integer getOrderId() {
@@ -29,16 +30,16 @@ public class OrderDto {
 	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
-	public CustomerDto getCustomerId() {
+	public CustomerForeignDto getCustomerId() {
 		return customerId;
 	}
-	public void setCustomerId(CustomerDto customerId) {
+	public void setCustomerId(CustomerForeignDto customerId) {
 		this.customerId = customerId;
 	}
-	public EmployeeDto getEmployeeId() {
+	public EmployeeForeignDto getEmployeeId() {
 		return employeeId;
 	}
-	public void setEmployeeId(EmployeeDto employeeId) {
+	public void setEmployeeId(EmployeeForeignDto employeeId) {
 		this.employeeId = employeeId;
 	}
 	public void setOrderDetails(List<OrderDetailsDto> orderDetails) {
@@ -63,9 +64,6 @@ public class OrderDto {
 	}
 	public void setOrderDetailsCollection(List<OrderDetailsDto> orderDetails) {
 		this.orderDetails = orderDetails;
-	}
-	public StatusDto getStatusId() {
-		return statusId;
 	}
 	public void setStatusId(StatusDto statusId) {
 		this.statusId = statusId;

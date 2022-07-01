@@ -22,7 +22,7 @@ public class ReviewDto {
 	private String starRating;
 	@NotEmpty(message = "ReviewPK must not be empty")
 	private ReviewPK reviewPK;
-	private CustomerDto customerEntity;
+	private CustomerForeignDto customerEntity;
 	public String getComment() {
 		return comment;
 	}
@@ -41,10 +41,10 @@ public class ReviewDto {
 	public void setReviewPK(ReviewPK reviewPK) {
 		this.reviewPK = reviewPK;
 	}
-	public CustomerDto getCustomerEntity() {
+	public CustomerForeignDto getCustomerEntity() {
 		return customerEntity;
 	}
-	public void setCustomerEntity(CustomerDto customerEntity) {
+	public void setCustomerEntity(CustomerForeignDto customerEntity) {
 		this.customerEntity = customerEntity;
 	}
 	
