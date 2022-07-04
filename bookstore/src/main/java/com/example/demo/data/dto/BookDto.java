@@ -16,7 +16,8 @@ public class BookDto {// use add book
 	private String publisher;
 	@NotEmpty(message = "Descrption must not be empty")
 	private String description;
-	private byte[] image;
+	@NotEmpty(message = "Image must not be empty")
+	private String image;
 	@NotNull(message = "Price must not be null")
 	@Min(value = 0, message = "Price >= 0")
 	@Pattern(regexp = "\\d*", message = "Price must be a number")
@@ -66,10 +67,10 @@ public class BookDto {// use add book
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public byte[] getImage() {
+	public String getImage() {
 		return image;
 	}
-	public void setImage(byte[] image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 	public String getPrice() {

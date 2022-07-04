@@ -27,7 +27,7 @@ public class BookEntity {
     @Column(name = "description", nullable = false, length = 2147483647)
     private String description;
     @Column(name = "image", nullable = true)
-    private byte[] image;
+    private String image;
     @Column(name = "price", nullable = false)
     private long price;
     @Column(name = "publisher", length = 255)
@@ -59,7 +59,7 @@ public class BookEntity {
 		this.bookId = bookId;
 	}
 
-	public BookEntity(String title, String publisher, long price, String description, byte[] image, AuthorEntity authorId,
+	public BookEntity(String title, String publisher, long price, String description, String image, AuthorEntity authorId,
 			CategoryEntity categoryId) {
 		super();
 		this.bookTitle = title;
@@ -88,10 +88,10 @@ public class BookEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public byte[] getImage() {
+	public String getImage() {
 		return image;
 	}
-	public void setImage(byte[] image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 	public long getPrice() {
