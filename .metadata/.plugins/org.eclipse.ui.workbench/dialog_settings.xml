@@ -14,14 +14,18 @@
 		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_USE_PERSISTED_SIZE" value="true"/>
 		<list key="textEntries">
 			<item value="1"/>
+			<item value="1"/>
 		</list>
 		<list key="orderedElements">
+			<item value="org.eclipse.pde.ui.NewProjectWizard"/>
 			<item value="org.eclipse.datatools.connectivity.DataSourceExplorerNavigator"/>
 		</list>
 		<list key="orderedProviders">
+			<item value="org.eclipse.ui.wizards"/>
 			<item value="org.eclipse.e4.ui.parts"/>
 		</list>
 		<list key="textArray">
+			<item value="plug"/>
 			<item value="da"/>
 		</list>
 	</section>

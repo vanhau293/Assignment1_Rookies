@@ -38,7 +38,7 @@ public class AccountServiceImpl implements AccountService{
 			throw new IllegalArgumentException("Username is already taken!");
 		}
 		AccountEntity account = modelMapper.map(dto, AccountEntity.class);
-		Optional<RoleEntity> roleOptional = roleRepository.findByRoleName("Customer");
+		Optional<RoleEntity> roleOptional = roleRepository.findByRoleName("Customer");//  customer sẵn trong db
 		if(!roleOptional.isPresent()) {
 			throw new ResourceNotFoundException("Role name not found");
 		}
@@ -53,7 +53,7 @@ public class AccountServiceImpl implements AccountService{
 		// TODO Auto-generated method stub
 		Optional<AccountEntity> optional = accountRepository.findById(accountId);
 		if(!optional.isPresent()) {
-			throw new ResourceNotFoundException("Account is not found");
+			throw new ResourceNotFoundException("Account not found");
 		}
 		AccountEntity account = optional.get();
 		account.setPassword(dto.getPassword());
@@ -67,13 +67,14 @@ public class AccountServiceImpl implements AccountService{
 		// TODO Auto-generated method stub
 		Optional<AccountEntity> optional = accountRepository.findById(accountId);
 		if(!optional.isPresent()) {
-			throw new ResourceNotFoundException("Account is not found");
+			throw new ResourceNotFoundException("Account not found");
 		}
 		AccountEntity account = optional.get();
 		if(account.isBlocked()) {
 			return ResponseEntity.badRequest().body(new MessageResponse("The account has been deleted before")) ;
 		}
 		account.setBlocked(true);
+		accountRepository.save(account);
 		return ResponseEntity.ok(new MessageResponse("The account blocked successfully"));
 	}
 

@@ -4,6 +4,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -25,9 +27,7 @@ public class AuthorServiceImplTest {
 	ModelMapper modelMapper;
 	AuthorDto initialAuthor;
 	AuthorEntity authorEntity;
-	public AuthorServiceImplTest(){
-		
-	}
+	
 	@BeforeEach
 	void beforeEach() {
 		authorRepository = mock(AuthorRepository.class);
@@ -35,9 +35,21 @@ public class AuthorServiceImplTest {
 		authorServiceImpl = new AuthorServiceImpl(authorRepository,modelMapper);
 		initialAuthor = mock(AuthorDto.class);
 		authorEntity = mock(AuthorEntity.class);
+		
 		when(authorRepository.save(authorEntity)).thenReturn(authorEntity);
 		when(modelMapper.map(initialAuthor,AuthorEntity.class)).thenReturn(authorEntity);
+		
 	}
+	@SuppressWarnings("unchecked")
+	@Test
+	void getAuthors_ShouldReturnList_WhenDataValid() {
+		List<AuthorEntity> list = new ArrayList<AuthorEntity>();
+		list.add(authorEntity);
+		when(authorRepository.findAll()).thenReturn(list);
+		ResponseEntity<?> result = authorServiceImpl.getAllAuthors();
+		assertThat(((List<AuthorDto>)result.getBody()).size(), is(list.size()));
+	}
+	
 	@Test
 	void addAuthor_ShouldReturnStatusOk_WhenDataValid() {
 		ResponseEntity<?> result = authorServiceImpl.addAuthor(initialAuthor);
@@ -57,7 +69,7 @@ public class AuthorServiceImplTest {
 		assertThat(result.getStatusCode(), is(HttpStatus.OK));
 	}
 	@Test
-	void updateAuthor_ShouldReturnStatusOk_WhenAuthorNotFound() {
+	void updateAuthor_ThrowNotFoundException_WhenAuthorNotFound() {
 		when(authorRepository.findById(1)).thenReturn(Optional.empty());
 		ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class,
                 () -> authorServiceImpl.updateAuthor(1, initialAuthor));
