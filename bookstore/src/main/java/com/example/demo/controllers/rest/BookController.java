@@ -1,6 +1,8 @@
 package com.example.demo.controllers.rest;
 
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class BookController {
 	private BookService bookService;
 	
 	@GetMapping("")
-	public ResponseEntity<?> getAllBooks(@RequestParam(value="outstock", required= false) boolean outStock){
+	public List<BookDto> getAllBooks(@RequestParam(value="outstock", required= false) boolean outStock){
 		return bookService.getAllBooks(outStock);
 	}
 	

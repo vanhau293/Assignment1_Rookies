@@ -8,6 +8,8 @@ import javax.validation.constraints.Pattern;
 import com.example.demo.data.entities.ReviewPK;
 
 public class ReviewDto {
+	@NotEmpty(message = "ReviewPK must not be empty")
+	private ReviewPK reviewPK;
 	@NotEmpty(message = "Created Date must not be empty")
 	//2022-06-28T12:25:32.020
 	@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d*", 
@@ -20,8 +22,6 @@ public class ReviewDto {
 	@Max(value = 5, message = "Star Rating <= 5")
 	@Min(value = 1, message = "Star Rating >= 1")
 	private String starRating;
-	@NotEmpty(message = "ReviewPK must not be empty")
-	private ReviewPK reviewPK;
 	private CustomerForeignDto customerEntity;
 	public String getComment() {
 		return comment;

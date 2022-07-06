@@ -37,7 +37,6 @@ public class JwtUtils {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
         claims.put("username", userPrincipal.getUsername());
-        System.out.println(userPrincipal.getUsername());
         claims.put("password", userPrincipal.getPassword());
         return Jwts.builder()
             .setSubject(userPrincipal.getUsername())

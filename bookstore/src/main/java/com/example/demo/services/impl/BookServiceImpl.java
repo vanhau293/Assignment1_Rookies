@@ -46,14 +46,14 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
-	public ResponseEntity<?> getAllBooks(boolean outStock) { // get book in stock
+	public List<BookDto> getAllBooks(boolean outStock) { // get book in stock
 		// TODO Auto-generated method stub
 		List<BookEntity> list;
 		if(outStock == false) list= bookRepository.findBooksInStock();
 		else list = bookRepository.findBooksOutOfStock();
 		List<BookDto> dto = new ArrayList<BookDto>();
 		list.forEach(b -> dto.add(modelMapper.map(b, BookDto.class)));
-		return ResponseEntity.ok(dto);
+		return dto;
 	}
 
 	@Override

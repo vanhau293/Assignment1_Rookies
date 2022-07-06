@@ -13,7 +13,7 @@ public class CartDto {
 	@Pattern(regexp = "\\d*", message = "Quantity must be a number")
 	@Min(value = 1, message = "Quantity >= 1")
 	private String quantity;
-	private BookDto bookEntity;
+	private BookForeignDto bookEntity;
 	public CartPK getCartPK() {
 		return cartPK;
 	}
@@ -26,10 +26,10 @@ public class CartDto {
 	public void setQuantity(String quantity) {
 		this.quantity = quantity;
 	}
-	public BookDto getBookEntity() {
+	public BookForeignDto getBookEntity() {
 		return bookEntity;
 	}
-	public void setBookEntity(BookDto bookEntity) {
+	public void setBookEntity(BookForeignDto bookEntity) {
 		this.bookEntity = bookEntity;
 	}
 	
