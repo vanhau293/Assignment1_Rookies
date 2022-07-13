@@ -10,7 +10,7 @@ import com.example.demo.data.entities.OrderEntity;
 public interface OrderRepository extends JpaRepository<OrderEntity, Integer>{
 	public List<OrderEntity> findOrdersWithStatus(Integer statusId);
 	public List<OrderEntity> findOrdersOnDate(Integer day, Integer month, Integer year);
-	public List<OrderEntity> findOrders(String date, Integer statusId);
+	public List<OrderEntity> findOrders(Integer day, Integer month, Integer year, Integer statusId);
 	public OrderEntity findByOrderId(Integer id);
 	public List<OrderEntity> findAll();
 }

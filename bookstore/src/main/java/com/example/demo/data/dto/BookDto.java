@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
 public class BookDto {// use add book
 	//@NotEmpty(message = "BookId must not be empty")
 	@Pattern(regexp = "\\d*", message = "BookId must be a number")
-	public Integer bookId;
+	public String bookId;
 	@NotEmpty(message = "Book title must not be empty")
 	private String bookTitle;
 	@NotEmpty(message = "Publisher must not be empty")
@@ -37,7 +37,7 @@ public class BookDto {// use add book
     private Float avgRating;
     public Collection<ReviewDto> reviewsCollection;
 	
-	public void setBookId(Integer bookId) {
+	public void setBookId(String bookId) {
 		this.bookId = bookId;
 	}
 	public Float getAvgRating() {

@@ -49,7 +49,6 @@ export default function Checkout(){
         }
         getCart();
         
-        console.log(total);
     },[]);
     const handleClickOrder = ()=> {
         var order = {};

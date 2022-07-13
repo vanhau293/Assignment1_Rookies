@@ -16,7 +16,7 @@ import lombok.Setter;
     @NamedQuery(name = "OrderEntity.findAll", query = "SELECT o FROM OrderEntity o")
     , @NamedQuery(name = "OrderEntity.findOrdersWithStatus", query = "SELECT o FROM OrderEntity o where o.statusId.statusId = :statusId")
     , @NamedQuery(name = "OrderEntity.findOrdersOnDate", query = "SELECT o FROM OrderEntity o where DAY(o.updateDate) = :day and MONTH(o.updateDate) = :month and year(o.updateDate) = :year")
-    , @NamedQuery(name = "OrderEntity.findOrders", query = "SELECT o FROM OrderEntity o where o.updateDate = :date and o.statusId = :statusId")
+    , @NamedQuery(name = "OrderEntity.findOrders", query = "SELECT o FROM OrderEntity o where DAY(o.updateDate) = :day and MONTH(o.updateDate) = :month and year(o.updateDate) = :year and o.statusId = :statusId")
     , @NamedQuery(name = "OrderEntity.findByOrderId", query = "SELECT o FROM OrderEntity o WHERE o.orderId = :orderId")})
 public class OrderEntity {
 	@Id

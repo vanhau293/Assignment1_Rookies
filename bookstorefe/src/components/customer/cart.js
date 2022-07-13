@@ -28,7 +28,7 @@ export default function Cart(){
 
     useEffect(()=>{
         if(localStorage.getItem('token') === null){
-            navigate('/');
+            window.location.href = "http://localhost:3000/"
         }
         getCart();
         

@@ -25,14 +25,14 @@ public class CustomerController {
 	CustomerService customerService;
 		
 	@GetMapping("/{id}")
-	public CustomerDto getCustomerById(@PathVariable Integer customerId){
-		return customerService.getCustomer(customerId);
+	public CustomerDto getCustomerById(@PathVariable Integer id){
+		return customerService.getCustomer(id);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateCustomer(@PathVariable Integer customerId, 
+	public ResponseEntity<?> updateCustomer(@PathVariable Integer id, 
 			@Valid @RequestBody CustomerDto dto){
-		return customerService.updateCustomer(customerId, dto);
+		return customerService.updateCustomer(id, dto);
 	}
 	@GetMapping("/{id}/orders")
 	public ResponseEntity<?> getOrders(@PathVariable Integer id){

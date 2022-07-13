@@ -4,19 +4,10 @@ import { Input } from "reactstrap";
 import { useEffect, useState } from 'react';
 import { get } from "../callApi";
 export default function Header(props){
-	const [categories, setCategories] = useState([]);
 	const [role, setRole] = useState(props.role);
 	const [isLogin, setIsLogin] = useState(props.isLogin);
 	let buttonAcc;
-	const listItems = (
-		<ul class="submenu-nav">
-			{categories.map( (category) =>
-			<li key = {category.categoryId}>
-				<Link to={`categories/${category.categoryId}`}>{category.categoryName}</Link>
-			</li>
-			)}
-		</ul>
-	);
+	
 	const handleLogout = (e) =>{
 		localStorage.removeItem('user');
 		localStorage.removeItem('token');
@@ -59,24 +50,11 @@ export default function Header(props){
 		);
 	}
 	
-  	function getListCategory(){
-    	get("/categories")
-		.then(function (response) {
-			setCategories(response.data);
-		})
-		.catch(function (error) {
-			let message = "Can't get list Category !";
-            if (error.response) {
-                message = error.response.data.message;
-			}
-            //else message = "Connection failed ! Please try again later";
-			alert(message);	
-		});
-    }
+  	
 	
   
   useEffect( () => {
-		getListCategory();
+		
 	},[]);
 //	const [countcart, setCountCart] = useState();
 	

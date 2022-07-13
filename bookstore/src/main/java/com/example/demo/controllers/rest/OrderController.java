@@ -1,7 +1,5 @@
 package com.example.demo.controllers.rest;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,19 +34,19 @@ public class OrderController {
 	}
 	
 	@PostMapping("") // checkout
-	public ResponseEntity<?> addOrder(@Valid @RequestBody OrderDto dto){
+	public ResponseEntity<?> addOrder( @RequestBody OrderDto dto){
 		return orderService.addOrder(dto);
 	}
 	
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateOrder(@PathVariable Integer id, @Valid @RequestBody UpdateOrderDto dto){
+	public ResponseEntity<?> updateOrder(@PathVariable Integer id, @RequestBody UpdateOrderDto dto){
 		return orderService.updateOrder(id, dto);
 	}
 	
 	@GetMapping("/status")
 	public ResponseEntity<?> getAllStatus(){
-		return ResponseEntity.ok(null);
+		return orderService.getAllStatus();
 	}
 	
 }

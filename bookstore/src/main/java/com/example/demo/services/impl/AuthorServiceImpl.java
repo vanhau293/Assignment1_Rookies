@@ -58,8 +58,15 @@ public class AuthorServiceImpl implements AuthorService{
 	public ResponseEntity<?> updateAuthor(Integer authorId, AuthorDto dto) {
 		// TODO Auto-generated method stub
 		Optional<AuthorEntity> authorOptional = authorRepository.findById(authorId);
+		
 		if(authorOptional.isPresent()) {
 			AuthorEntity author = authorOptional.get();
+			if(!dto.getAuthorName().trim().equals(author.getAuthorName())) {
+				Optional<AuthorEntity> optional = authorRepository.findByAuthorName(dto.getAuthorName());
+				if(optional.isPresent()) {
+					return ResponseEntity.badRequest().body(new MessageResponse("Author name already exists"));
+				}
+			}
 			modelMapper.map(dto,author);
 			author = authorRepository.save(author);
 			return ResponseEntity.ok(new MessageResponse("Update author successfully"));

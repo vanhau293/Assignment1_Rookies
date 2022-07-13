@@ -72,6 +72,7 @@ public class BookServiceImpl implements BookService{
 	@Override
 	public ResponseEntity<?> addBook(BookDto dto) {
 		// TODO Auto-generated method stub
+		dto.setAvgRating((float) 5);
 		Optional<CategoryEntity> optionalCategory = categoryRepository.findById(Integer.parseInt(dto.getCategoryId().getCategoryId()));
 		if(!optionalCategory.isPresent()) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Category not found"));

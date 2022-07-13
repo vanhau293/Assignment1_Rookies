@@ -36,6 +36,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(thongtin.length > 1 && !BCrypt.checkpw(thongtin[1],user.getPassword())) {
         	throw new UnauthorizedException("Password is wrong");
         }
+        if(user.isBlocked()) {
+        	throw new UnauthorizedException("Account is blocked");
+        }
+        
         return UserDetailsImpl.build(user);
     }
     

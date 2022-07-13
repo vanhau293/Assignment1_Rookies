@@ -13,8 +13,8 @@ import lombok.Setter;
 @Setter
 @NamedQueries({
 	@NamedQuery(name = "BookEntity.findAll", query = "SELECT b FROM BookEntity b")
-	, @NamedQuery(name = "BookEntity.findBooksInStock", query =  "SELECT b FROM BookEntity b where b.inStock = true")
-	, @NamedQuery(name = "BookEntity.findBooksOutOfStock", query =  "SELECT b FROM BookEntity b where b.inStock = false")
+	, @NamedQuery(name = "BookEntity.findBooksInStock", query =  "SELECT b FROM BookEntity b where b.inStock = 'true'")
+	, @NamedQuery(name = "BookEntity.findBooksOutOfStock", query =  "SELECT b FROM BookEntity b where b.inStock = 'false'")
     , @NamedQuery(name = "BookEntity.findByBookTitle", query = "SELECT b FROM BookEntity b WHERE b.bookTitle = :bookTitle")
 	, @NamedQuery(name = "BookEntity.findReviewByBookId", query = "SELECT b.reviewsCollection FROM BookEntity b WHERE b.bookId = :bookId")})
 public class BookEntity {

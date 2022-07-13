@@ -64,15 +64,16 @@ public class OrderServiceImpl implements OrderService{
 			return ResponseEntity.badRequest().body(new MessageResponse("Please enter param: date or statusId"));
 		}
 		List<OrderEntity> list = null;
-		
+		String split[] = null;
 		if(date == null)
 			list = orderRepository.findOrdersWithStatus(statusId);
 		else if(statusId == null) {
-			String split[] = date.split("-"); // date dd/MM/yyyy
+			split = date.split("-"); // date dd/MM/yyyy
 			list = orderRepository.findOrdersOnDate(Integer.parseInt(split[0]),Integer.parseInt(split[1]),Integer.parseInt(split[2]));
 		}
 		else 
-			list = orderRepository.findOrders(date, statusId);
+			split = date.split("-");
+			list = orderRepository.findOrders(Integer.parseInt(split[0]),Integer.parseInt(split[1]),Integer.parseInt(split[2]), statusId);
 		
 		if(list.size()==0) {
 			return ResponseEntity.ok(new MessageResponse("No orders on "+ date +" with statusId: "+statusId));
@@ -135,11 +136,11 @@ public class OrderServiceImpl implements OrderService{
 			throw new ResourceNotFoundException("Order not found");
 		}
 		Optional<StatusEntity> optionalStatus = statusRepository.findById(dto.getStatusId().getStatusId());
-		if(optionalStatus.isPresent()) {
+		if(!optionalStatus.isPresent()) {
 			throw new ResourceNotFoundException("StatusId not found");
 		}
 		Optional<EmployeeEntity> optionalEmployee = employeeRepository.findById(Integer.parseInt(dto.getEmployeeId().getEmployeeId()));
-		if(optionalEmployee.isPresent()) {
+		if(!optionalEmployee.isPresent()) {
 			throw new ResourceNotFoundException("EmployId not found");
 		}
 		OrderEntity order = optionalOrder.get();

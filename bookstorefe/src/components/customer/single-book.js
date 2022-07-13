@@ -159,7 +159,7 @@ export default function SingleBook(){
                             
                             <div class="tab-pane fade show active" id="productDesc" role="tabpanel" aria-labelledby="product-desc-tab">
                                 <div class="product-desc">
-                                <p>hihi</p>
+                                <p>{book.description}</p>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="productReview" role="tabpanel" aria-labelledby="product-review-tab">
