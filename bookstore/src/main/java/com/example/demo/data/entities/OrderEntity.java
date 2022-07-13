@@ -1,10 +1,10 @@
 package com.example.demo.data.entities;
-
-import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,9 +24,9 @@ public class OrderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderId;
     @Column(name = "update_date", nullable = false)
-    //@Temporal(TemporalType.TIMESTAMP)
-    //@DateTimeFormat(pattern = "HH:mm:ss.SSS dd-MM-yyyy")
-    private LocalDateTime updateDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "HH:mm:ss.SSS dd-MM-yyyy")
+    private Date updateDate;
     @Basic(optional = false)
     @Column(name = "total_cash", nullable = false)
     private long totalCash;
@@ -59,7 +59,7 @@ public class OrderEntity {
 		this.orderId = orderId;
 	}
 
-	public OrderEntity(LocalDateTime updateDate, long totalCash, EmployeeEntity employeeEntity) {
+	public OrderEntity(Date updateDate, long totalCash, EmployeeEntity employeeEntity) {
     	super();
         this.updateDate = updateDate;
         this.totalCash = totalCash;
@@ -74,11 +74,11 @@ public class OrderEntity {
 		this.orderId = orderId;
 	}
 
-	public LocalDateTime getUpdateDate() {
+	public Date getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdateDate(LocalDateTime updateDate) {
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
 

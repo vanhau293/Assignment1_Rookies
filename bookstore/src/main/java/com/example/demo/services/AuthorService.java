@@ -9,4 +9,5 @@ public interface AuthorService {
 	public ResponseEntity<?> getAllAuthors();
 	public ResponseEntity<?> addAuthor(AuthorDto dto);
 	public ResponseEntity<?> updateAuthor(Integer authorId, AuthorDto dto);
+	public ResponseEntity<?> getBooksByAuthorId(Integer authorId);
 }

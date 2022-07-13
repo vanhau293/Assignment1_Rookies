@@ -1,9 +1,12 @@
 package com.example.demo.data.dto;
 
+import java.util.Collection;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
 
 
 public class BookDto {// use add book
@@ -32,6 +35,7 @@ public class BookDto {// use add book
     @NotNull(message = "Author must not be null")
     private AuthorForeignDto authorId;
     private Float avgRating;
+    public Collection<ReviewDto> reviewsCollection;
 	
 	public void setBookId(Integer bookId) {
 		this.bookId = bookId;
@@ -96,6 +100,9 @@ public class BookDto {// use add book
 	}
 	public void setTotalPage(String totalPage) {
 		this.totalPage = totalPage;
+	}
+	public void setReviewsCollection(Collection<ReviewDto> reviewsCollection) {
+		this.reviewsCollection = reviewsCollection;
 	}
 	
 	

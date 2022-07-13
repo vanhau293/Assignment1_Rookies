@@ -1,11 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import { get, postWithAuth} from "../../callApi";
+import Star from "../star-rating";
+export function fomatMoney(n){
+    if(n<1000) return n+' VND';
+    if(n>=1000){
+      if(n%1000 >=100) return Math.floor(n/1000) +' '+n%1000 +' VND';
+      else if (n%1000 >= 10) return Math.floor(n/1000) +' 0'+n%1000+' VND';
+      else return Math.floor(n/1000) +' 00'+n%1000+' VND';
+    }
+}
+export function addCart(cart){
+    postWithAuth("/customers/cart", cart)
+    .then(function (response) {
+        alert(response.data.message);
+      })
+      .catch(function (error) {
+        let message = "Can't add Cart !";
+        if (!error.response) {
+          message = error.response.data.message;
+        }
+              //else message = "Connection failed ! Please try again later";
+        alert(message);	
+      });
+    }
 export default function SingleBook(){
-    const {id} = useParams();
-    console.log(id);
+    const [book, setBook] = useState([]);
+    let {id} = useParams();
+    const [reviews, setReviews] = useState([]);
+    const [categoryName, setCategoryName]= useState("");
+    const [star, setStar] = useState(5);
+    let quantity = 1;
+    function getBook(id){
+        get("/books/"+id)
+        .then(function (response) {
+          setBook(response.data);
+          setReviews(response.data.reviewsCollection);
+          setCategoryName(response.data.categoryId.categoryName);
+          
+          setStar(response.data.avgRating);
+        })
+        .catch(function (error) {
+          let message = "Can't get Book !";
+          if (error.response) {
+            message = error.response.data.message;
+          }
+                //else message = "Connection failed ! Please try again later";
+          alert(message);	
+        });
+      }
+    useEffect(()=>{
+        getBook(id);
+        //console.log(Object.keys(book.reviewsCollection).length);
+    },[id])
+    
+    
+    
+    const handleAddtoCart = () => {
+        if(localStorage.getItem('token') === null) return;
+      
+        var cart = {};
+        var cartPK= {};
+        cartPK.bookId = id;
+        cartPK.customerId = JSON.parse(localStorage.getItem('information')).customerId;
+        cart.cartPK = cartPK;
+        cart.quantity = quantity;
+        console.log(cart);
+        addCart(cart);
+    }
     return (
-        
         <main class = "main-content">
             
             <section class="product-single-area">
@@ -19,66 +82,28 @@ export default function SingleBook(){
                                 <div class="swiper-slide zoom zoom-hover">
                                 <div class="thumb-item">
                                     <a class="lightbox-image" data-fancybox="gallery" href="assets/img/shop/details/1.jpg">
-                                    <img src="assets/img/shop/details/1.jpg" alt="Image-HasTech"/>
-                                    </a>
-                                </div>
-                                </div>
-                                <div class="swiper-slide zoom zoom-hover">
-                                <div class="thumb-item">
-                                    <a class="lightbox-image" data-fancybox="gallery" href="assets/img/shop/details/2.jpg">
-                                    <img src="assets/img/shop/details/2.jpg" alt="Image-HasTech"/>
-                                    </a>
-                                </div>
-                                </div>
-                                <div class="swiper-slide zoom zoom-hover">
-                                <div class="thumb-item">
-                                    <a class="lightbox-image" data-fancybox="gallery" href="assets/img/shop/details/3.jpg">
-                                    <img src="assets/img/shop/details/3.jpg" alt="Image-HasTech"/>
+                                    <img src={book.image} alt="Image-HasTech"/>
                                     </a>
                                 </div>
                                 </div>
                             </div>
                             </div>
                         </div>
-                        <div class="single-product-nav">
-                            <div class="swiper-container single-product-nav-slider">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                <div class="nav-item">
-                                    <img src="assets/img/shop/details/nav1.jpg" alt="Image-HasTech"/>
-                                </div>
-                                </div>
-                                <div class="swiper-slide">
-                                <div class="nav-item">
-                                    <img src="assets/img/shop/details/nav2.jpg" alt="Image-HasTech"/>
-                                </div>
-                                </div>
-                                <div class="swiper-slide">
-                                <div class="nav-item">
-                                    <img src="assets/img/shop/details/nav3.jpg" alt="Image-HasTech"/>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
+                        
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="single-product-info">
-                        <h4 class="title">Jigsaw Puzzles For Kids</h4>
+                        <h4 class="title">{book.bookTitle}</h4>
                         <div class="prices">
-                            <span class="price">$120.59</span>
-                        </div>
+                            <span class="price">{fomatMoney(book.price)}</span>
+                        </div> 
                         <div class="product-rating">
                             <div class="rating">
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
+                                <Star star = {star}/>
                             </div>
                             <div class="review">
-                            <a href="#/">( 5 Customer Review )</a>
+                            <a >({reviews.length} Customer Review)</a>
                             </div>
                         </div>
                         <div class="single-product-featured">
@@ -88,44 +113,32 @@ export default function SingleBook(){
                             <li><i class="fa fa-check"></i> Money Return</li>
                             </ul>
                         </div>
-                        <p class="product-desc">Lorem ipsum dolor sit amet, consect adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quisll exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duisol aute irure dolor in reprehenderit.</p>
+                        <p class="product-desc">{(book.description)}</p>
                         <div class="quick-product-action">
                             <div class="action-top">
                             <div class="pro-qty">
-                                <input type="text" id="quantity" title="Quantity" value="01" />
+                                <input type="number" id="quantity" title="Quantity" defaultValue={1} onChange={event => (quantity = event.target.value)} min="1" />
                             </div>
-                            <button class="btn btn-theme">Add to Cart</button>
-                            <a class="btn-wishlist" href="shop-wishlist.html">Add to Wishlist</a>
+                            <button class="btn btn-theme" onClick={()=> handleAddtoCart()}>Add to Cart</button>
+                            
                             </div>
                         </div>
                         <div class="widget">
-                            <h3 class="title">SKU:</h3>
+                            <h3 class="title">Publisher:</h3>
                             <div class="widget-tags">
-                            <span>Ch-256xl</span>
+                            <span> {book.publisher}</span>
                             </div>
                         </div>
                         <div class="widget">
                             <h3 class="title">Categories:</h3>
                             <div class="widget-tags">
-                            <a href="blog.html">Toys.</a>
-                            <a href="blog.html">Dresss</a>
+                            <a > {categoryName}</a>
                             </div>
                         </div>
                         <div class="widget">
-                            <h3 class="title">Tag:</h3>
+                            <h3 class="title">Total Page:</h3>
                             <div class="widget-tags">
-                            <a href="blog.html">Toys,</a>
-                            <a href="blog.html">Dress</a>
-                            </div>
-                        </div>
-                        <div class="widget">
-                            <h3 class="title">Share:</h3>
-                            <div class="widget-tags widget-share">
-                            <span class="fa fa-facebook"></span>
-                            <span class="fa fa-dribbble"></span>
-                            <span class="fa fa-pinterest-p"></span>
-                            <span class="fa fa-twitter"></span>
-                            <span class="fa fa-linkedin"></span>
+                            <a > {book.totalPage}</a>
                             </div>
                         </div>
                         </div>
@@ -134,60 +147,31 @@ export default function SingleBook(){
                         <div class="col-lg-12">
                         <div class="product-description-review">
                             <ul class="nav nav-tabs product-description-tab-menu" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="product-aditional-tab" data-bs-toggle="tab" data-bs-target="#commentProduct" type="button" role="tab" aria-selected="false">Information</button>
-                            </li>
+                            
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="product-desc-tab" data-bs-toggle="tab" data-bs-target="#productDesc" type="button" role="tab" aria-controls="productDesc" aria-selected="true">Description</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="product-review-tab" data-bs-toggle="tab" data-bs-target="#productReview" type="button" role="tab" aria-controls="productReview" aria-selected="false">Reviews (03)</button>
+                                <button class="nav-link" id="product-review-tab" data-bs-toggle="tab" data-bs-target="#productReview" type="button" role="tab" aria-controls="productReview" aria-selected="false">Reviews ({reviews.length})</button>
                             </li>
                             </ul>
                             <div class="tab-content product-description-tab-content" id="myTabContent">
-                            <div class="tab-pane fade" id="commentProduct" role="tabpanel" aria-labelledby="product-aditional-tab">
-                                <div class="product-desc">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed utlo perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-                                </div>
-                            </div>
+                            
                             <div class="tab-pane fade show active" id="productDesc" role="tabpanel" aria-labelledby="product-desc-tab">
                                 <div class="product-desc">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed utlo perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                                <p>hihi</p>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="productReview" role="tabpanel" aria-labelledby="product-review-tab">
                                 <div class="product-review">
                                 <div class="review-header">
-                                    <h4 class="title">Customer Reviews</h4>
-                                    <div class="review-info">
-                                    <ul class="review-rating">
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star-o"></i></li>
-                                    </ul>
-                                    <span class="review-caption">Based on 1 review</span>
-                                    <span class="review-write-btn">Write a review</span>
-                                    </div>
-                                </div>
-                                <div class="product-review-form">
                                     <h4 class="title">Write a review</h4>
+                                </div>
+                                    
                                     <form action="#" method="post">
                                     <div class="review-form-content">
                                         <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                            <label for="reviewFormName">Name</label>
-                                            <input class="form-control" id="reviewFormName" type="text" placeholder="Enter your name" required=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                            <label for="reviewFormEmail">Email</label>
-                                            <input class="form-control" id="reviewFormEmail" type="email" placeholder="john.smith@example.com" required=""/>
-                                            </div>
-                                        </div>
+                                        
                                         <div class="col-md-12">
                                             <div class="rating">
                                             <span class="rating-title">Rating</span>
@@ -200,15 +184,10 @@ export default function SingleBook(){
                                             </span>
                                             </div>
                                         </div>
+                                        
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                            <label for="reviewReviewTitle">Review Title</label>
-                                            <input class="form-control" id="reviewReviewTitle" type="text" placeholder="Give your review a title" required=""/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                            <label for="reviewFormTextarea">Body of Review <span>(1500)</span></label>
+                                            <label for="reviewFormTextarea">Body of Review </label>
                                             <textarea class="form-control textarea" id="reviewFormTextarea" name="comment" rows="7" placeholder="Write your comments here" required=""></textarea>
                                             </div>
                                         </div>
@@ -222,52 +201,19 @@ export default function SingleBook(){
                                         </div>
                                     </div>
                                     </form>
-                                </div>
-                                <div class="review-content">
-                                    <div class="review-item">
-                                    <ul class="review-rating">
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star-o"></i></li>
-                                    </ul>
-                                    <h4 class="title">Cobus Bester</h4>
-                                    <h5 class="review-date"><span>Cobus Bester</span> on <span>Mar 03, 2021</span></h5>
-                                    <p>Can’t wait to start mixin’ with this one! Irba-irr-Up-up-up-up-date your theme!</p>
-                                    <a class="review-report" href="#/">Report as Inappropriate</a>
-                                    </div>
-                                </div>
-                                <div class="review-content">
-                                    <div class="review-item">
-                                    <ul class="review-rating">
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star-o"></i></li>
-                                    </ul>
-                                    <h4 class="title">Cobus Bester</h4>
-                                    <h5 class="review-date"><span>Cobus Bester</span> on <span>Mar 05, 2021</span></h5>
-                                    <p>Can’t wait to start mixin’ with this one! Irba-irr-Up-up-up-up-date your theme!</p>
-                                    <a class="review-report" href="#/">Report as Inappropriate</a>
-                                    </div>
-                                </div>
-                                <div class="review-content">
-                                    <div class="review-item">
-                                    <ul class="review-rating">
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star"></i></li>
-                                        <li><i class="fa fa-star-o"></i></li>
-                                    </ul>
-                                    <h4 class="title">Cobus Bester</h4>
-                                    <h5 class="review-date"><span>Cobus Bester</span> on <span>Mar 07, 2021</span></h5>
-                                    <p>Can’t wait to start mixin’ with this one! Irba-irr-Up-up-up-up-date your theme!</p>
-                                    <a class="review-report" href="#/">Report as Inappropriate</a>
-                                    </div>
-                                </div>
+                                    {reviews.map((obj, index) => (
+                                        <div class="review-content">
+                                            <div class="review-item">
+                                            <ul class="review-rating">
+                                                <Star star = {obj.starRating}/>
+                                            </ul>
+                                            <h4 class="review-date"><span>{obj.customerEntity.name}</span> on <span>{obj.createdDate}</span></h4>
+                                            <p>{obj.comment}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                
+                                
                                 </div>
                             </div>
                             </div>

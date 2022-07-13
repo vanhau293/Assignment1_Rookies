@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.demo.data.dto.AccountUpdateDto;
 import com.example.demo.data.entities.AccountEntity;
@@ -32,6 +33,7 @@ public class AccountServiceImplTest {
 	private RegisterRequest dto;
 	private RoleEntity role;
 	private AccountUpdateDto dtoUpdate;
+	private PasswordEncoder encoder;
 	
 	
 	@BeforeEach
@@ -39,14 +41,14 @@ public class AccountServiceImplTest {
 		
 		accountRepository = mock(AccountRepository.class);
 		roleRepository = mock(RoleRepository.class);
-		modelMapper = mock(ModelMapper.class);
-		dtoUpdate = mock(AccountUpdateDto.class);
-		accountServiceImpl = new AccountServiceImpl(accountRepository, roleRepository, modelMapper);
+		modelMapper = new ModelMapper();
+		dtoUpdate = new AccountUpdateDto();
+		encoder = mock(PasswordEncoder.class);
+		accountServiceImpl = new AccountServiceImpl(accountRepository, roleRepository, encoder, modelMapper);
 		initialAccount = mock(AccountEntity.class);
-		dto = mock(RegisterRequest.class);
-		role = mock(RoleEntity.class);
+		dto = new RegisterRequest();
+		role = new RoleEntity();
 		when(accountRepository.save(initialAccount)).thenReturn(expectedAccount);
-		when(modelMapper.map(dto, AccountEntity.class)).thenReturn(initialAccount);
 		
 	}
 	
@@ -55,7 +57,6 @@ public class AccountServiceImplTest {
 		when(roleRepository.findByRoleName("Customer")).thenReturn(Optional.of(role));
 		when(accountRepository.findByUserName(dto.getName())).thenReturn(Optional.empty());
 		AccountEntity result = accountServiceImpl.addAccount(dto);
-		verify(initialAccount).setRoleId(role);
 		assertThat(result, is(expectedAccount));
 	}
 	@Test

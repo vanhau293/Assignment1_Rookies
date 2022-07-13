@@ -1,6 +1,7 @@
 package com.example.demo.services.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,17 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.data.dto.OrderDetailsDto;
+import com.example.demo.data.dto.CartDto;
 import com.example.demo.data.dto.OrderDto;
 import com.example.demo.data.dto.StatusDto;
 import com.example.demo.data.dto.UpdateOrderDto;
 import com.example.demo.data.entities.BookEntity;
+import com.example.demo.data.entities.CartEntity;
 import com.example.demo.data.entities.EmployeeEntity;
 import com.example.demo.data.entities.OrderDetailEntity;
 import com.example.demo.data.entities.OrderDetailPK;
 import com.example.demo.data.entities.OrderEntity;
 import com.example.demo.data.entities.StatusEntity;
 import com.example.demo.repositories.BookRepository;
+import com.example.demo.repositories.CartRepository;
 import com.example.demo.repositories.EmployeeRepository;
 import com.example.demo.repositories.OrderDetailRepository;
 import com.example.demo.repositories.OrderRepository;
@@ -36,17 +39,19 @@ public class OrderServiceImpl implements OrderService{
 	OrderDetailRepository orderDetailRepository;
 	StatusRepository statusRepository;
 	EmployeeRepository employeeRepository;
+	CartRepository cartRepository;
 	BookRepository bookRepository;
 	ModelMapper modelMapper;
 	
 	@Autowired
-	public OrderServiceImpl(StatusRepository statusRepository, BookRepository bookRepository, EmployeeRepository employeeRepository,
+	public OrderServiceImpl(StatusRepository statusRepository, BookRepository bookRepository,CartRepository cartRepository, EmployeeRepository employeeRepository,
 			OrderRepository orderRepository, OrderDetailRepository orderDetailRepository, ModelMapper modelMapper) {
 		// TODO Auto-generated constructor stub
 		this.orderDetailRepository = orderDetailRepository;
 		this.statusRepository = statusRepository;
 		this.orderRepository = orderRepository;
 		this.bookRepository = bookRepository;
+		this.cartRepository = cartRepository;
 		this.employeeRepository = employeeRepository;
 		this.modelMapper = modelMapper;
 	}
@@ -94,23 +99,30 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		OrderEntity order = modelMapper.map(dto, OrderEntity.class);
 		Optional<StatusEntity> optionalStatus = statusRepository.findById(1);
-		if(optionalStatus.isPresent()) {
+		if(!optionalStatus.isPresent()) {
 			throw new ResourceNotFoundException("Status 1 not found");
 		}
+		long totalCash = 0;
 		order.setStatusId(optionalStatus.get());
+		order.setUpdateDate(new Date());
 		order = orderRepository.save(order);
 		List<OrderDetailEntity> details = new ArrayList<>();
 		OrderDetailEntity detail;
-		for(OrderDetailsDto s : dto.getOrderDetails()) {
-			Integer bookId =Integer.parseInt( s.getBookEntity().getBookId());
+		for(CartDto s : dto.getListCart()) {
+			Integer bookId = s.getCartPK().getBookId();
 			Optional<BookEntity> optionalBook = bookRepository.findById(bookId);
 			if(!optionalBook.isPresent()) {
-				throw new ResourceNotFoundException("BookId: " + " not found");
+				throw new ResourceNotFoundException("BookId: " + bookId + " not found");
 			}
 			detail = modelMapper.map(s, OrderDetailEntity.class);
 			detail.setOrderDetailPK(new OrderDetailPK(order.getOrderId(),bookId));
+			detail.setUnitPrice(optionalBook.get().getPrice());
+			totalCash += (optionalBook.get().getPrice()*Integer.parseInt(s.getQuantity()));
 			details.add(detail);
+			cartRepository.delete(modelMapper.map(s, CartEntity.class));
 		}
+		order.setTotalCash(totalCash);
+		orderRepository.save(order);
 		orderDetailRepository.saveAll(details);
 		return ResponseEntity.ok(new MessageResponse("The order was added successfully"));
 	}
@@ -136,7 +148,8 @@ public class OrderServiceImpl implements OrderService{
 			order.setStatusId(null);
 			order.setEmployeeId(null);
 			modelMapper.map(dto, order);
-			
+
+			order.setUpdateDate(new Date());
 			orderRepository.save(order);
 			return ResponseEntity.ok(new MessageResponse("Update order successfully"));
 		}

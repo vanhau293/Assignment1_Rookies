@@ -43,11 +43,11 @@ public class CustomerController {
 		return customerService.getCartByCustomerId(id);
 	}
 	@PostMapping("/cart")
-	public ResponseEntity<?> addCart(@RequestBody CartDto dto){
+	public ResponseEntity<?> addCart(@Valid @RequestBody CartDto dto){
 		return customerService.addCart(dto);
 	}
 	@PutMapping("/cart")
-	public ResponseEntity<?> updateCart(@RequestBody CartDto dto){
+	public ResponseEntity<?> updateCart(@Valid @RequestBody CartDto dto){
 		return customerService.updateCart(dto);
 	}
 	@DeleteMapping("/{id}/cart")

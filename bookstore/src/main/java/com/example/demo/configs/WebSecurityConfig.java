@@ -1,5 +1,6 @@
 package com.example.demo.configs;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -60,6 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
@@ -67,6 +70,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
             .antMatchers("/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+            .antMatchers(HttpMethod.GET,"/categories/**").permitAll()
+            .antMatchers(HttpMethod.GET,"/books/**").permitAll()
+            .antMatchers(HttpMethod.GET,"/authors/**").permitAll()
+            
             
             .antMatchers(HttpMethod.DELETE,"/accounts").hasAuthority("ADMIN")
             .antMatchers(HttpMethod.GET,"/orders").hasAuthority("ADMIN")

@@ -10,11 +10,7 @@ import com.example.demo.data.entities.ReviewPK;
 public class ReviewDto {
 	@NotEmpty(message = "ReviewPK must not be empty")
 	private ReviewPK reviewPK;
-	@NotEmpty(message = "Created Date must not be empty")
-	//2022-06-28T12:25:32.020
-	@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d*", 
-	message = "Created date must be a day like (yyyy-MM-ddTHH:mm:ss.SSS)")
-	private String createdDate;
+	public String createdDate;
 	@NotEmpty(message = "Comment must not be empty")
 	private String comment;
 	@NotEmpty(message = "Star Rating must not be empty")
@@ -46,6 +42,9 @@ public class ReviewDto {
 	}
 	public void setCustomerEntity(CustomerForeignDto customerEntity) {
 		this.customerEntity = customerEntity;
+	}
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
 	}
 	
 }

@@ -32,7 +32,7 @@ public class AuthController {
     @Autowired
     public AuthController (PasswordEncoder encoder, AccountService accountService,CustomerService customerService, AuthService authService) {
         this.encoder = encoder;
-        this.accountService = accountService;
+        this.accountService = accountService; 
         this.customerService = customerService;
         this.authService = authService;
     }

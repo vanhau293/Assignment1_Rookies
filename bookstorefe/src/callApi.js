@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url_start ="http://localhost:8080"
+const url_start ="https://bookstoreapi-rookies.herokuapp.com"
 
 export function get(url) {
     const axios = require('axios');
@@ -11,15 +11,15 @@ export function get(url) {
         },
     });
 }
-// export function getwithAuthtication(url){
-//     return axios.get(url_start + url ,{
-//         headers:{
-//             Authorization: `Bearer ${getCookie("token")}`,
-//             "Access-Control-Allow-Origin": "*",
-//             'Content-Type': 'application/json; charset=utf-8',
-//         },
-//     });
-// }
+export function getwithAuthtication(url){
+    return axios.get(url_start + url ,{
+        headers:{
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json; charset=utf-8',
+        },
+    });
+}
 export function post(url, body) {
     return axios.post(url_start + url, body, {
         headers: {
@@ -27,4 +27,27 @@ export function post(url, body) {
             'Content-Type': 'application/json; charset=utf-8',
         },
     });
+}
+export function postWithAuth(url, body) {
+    return axios.post(url_start + url, body, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json; charset=utf-8',
+        },
+    });
+}
+export function putWithAuth(url, body){
+    const axios = require('axios');
+    let req = {
+        url: url,
+        method: 'PUT',
+        data: body,
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+      }
+    return axios(req);
 }

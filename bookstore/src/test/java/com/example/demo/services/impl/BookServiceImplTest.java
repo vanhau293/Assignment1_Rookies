@@ -43,7 +43,7 @@ public class BookServiceImplTest {
 		reviewRepository = mock(ReviewRepository.class);
 		customerRepository = mock(CustomerRepository.class);
 		modelMapper = mock(ModelMapper.class);
-		
+		when(modelMapper.map(bookEntity, BookDto.class)).thenReturn(bookDto);
 		bookServiceImpl = new BookServiceImpl(bookRepository, authorRepository, customerRepository, categoryRepository, reviewRepository, modelMapper);
 		bookDto = mock(BookDto.class);
 		bookEntity = mock(BookEntity.class);
@@ -53,7 +53,7 @@ public class BookServiceImplTest {
 	public void getAllBooks_ShouldReturnListBookDto_WhenOutStockTrue() {
 		List<BookEntity> list = new ArrayList<BookEntity>();
 		list.add(bookEntity);
-		when(modelMapper.map(bookEntity, BookDto.class)).thenReturn(bookDto);
+		
 		when(bookRepository.findBooksOutOfStock()).thenReturn(list);
 		List<BookDto> result = bookServiceImpl.getAllBooks(true);
 		assertThat(result.size(), is(list.size()));
@@ -62,7 +62,6 @@ public class BookServiceImplTest {
 	public void getAllBooks_ShouldReturnListBookDto_WhenOutStockFalse() {
 		List<BookEntity> list = new ArrayList<BookEntity>();
 		list.add(bookEntity);
-		when(modelMapper.map(bookEntity, BookDto.class)).thenReturn(bookDto);
 		when(bookRepository.findBooksInStock()).thenReturn(list);
 		List<BookDto> result = bookServiceImpl.getAllBooks(false);
 		assertThat(result.size(), is(list.size()));
@@ -81,4 +80,5 @@ public class BookServiceImplTest {
 				() -> bookServiceImpl.getBook(1));
 		assertThat(exception.getMessage(), is("Book not found"));
 	}
+	
 }

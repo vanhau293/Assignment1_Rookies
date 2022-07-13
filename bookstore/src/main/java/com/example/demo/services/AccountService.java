@@ -10,4 +10,5 @@ public interface AccountService {
 	public AccountEntity addAccount(RegisterRequest dto);
 	public ResponseEntity<?> updateAccount(AccountUpdateDto dto, Integer accoutnId);
 	public ResponseEntity<?> blockAccount(Integer accountId);
+	public ResponseEntity<?> getInformation(Integer accountId);
 }

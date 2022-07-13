@@ -35,9 +35,8 @@ public class OrderController {
 		return orderService.getOrderById(id);
 	}
 	
-	@PostMapping("")
+	@PostMapping("") // checkout
 	public ResponseEntity<?> addOrder(@Valid @RequestBody OrderDto dto){
-		System.out.println("hi");
 		return orderService.addOrder(dto);
 	}
 	

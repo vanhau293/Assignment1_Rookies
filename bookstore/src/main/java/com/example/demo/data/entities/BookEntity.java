@@ -24,7 +24,7 @@ public class BookEntity {
     private Integer bookId;
     @Column(name = "avg_rating")
     private Float avgRating;
-    @Column(name = "description", nullable = false, length = 2147483647)
+    @Column(name = "description", nullable = false)
     private String description;
     @Column(name = "image", nullable = true)
     private String image;

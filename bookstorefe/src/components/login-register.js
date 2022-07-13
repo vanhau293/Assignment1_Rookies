@@ -1,55 +1,78 @@
 import React, { useState } from "react";
-import { post } from "../callApi";
+import { getwithAuthtication, post } from "../callApi";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Form, FormGroup, FormFeedback, FormText } from "reactstrap";
 
 
 export default function Login(props){
     const navigate = useNavigate();
+    const [password, setPassword] = useState('');
+    const [confirm, setConfirm] = useState('');
     const [account, setAccount] = useState({
         username : '',
         password : ''
     });
-    let [user, setUser] = useState();
+    const [register, setRegister] = useState({
+        userName : '',
+        password : '',
+        name : '',
+        email : '',
+        phoneNumber : '',
+        address : ''
+    })
     const handleUsername = event => {
         account.username = event.target.value
-        console.log(event.target.value);
         setAccount(account)
     };
 
     const handlePassword = event => {
         account.password = event.target.value
         setAccount(account)
-        console.log(account.password);
     };
     const handleLogin =  (e) =>{
         e.preventDefault();
         post("/auth/login", account)
         .then(function (response) {
             if (response.status === 200) {
-                alert("Hello, "+ response.data.username);
+                
                 localStorage.setItem('user', JSON.stringify(response.data))
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('isLogin', 'true');
-                alert("Hello, "+ response.data.username);
-                props.onLoginChange(response.data.role, true);
-                if(response.data.role === "ADMIN"){
-                    navigate('/manage/orders');
-                } 
-                else {
-                    navigate('/', {replace: true});
-                }
+                getInformation();
+                alert("Hello, "+ JSON.parse(localStorage.getItem('information')).name + " !!!");
+                props.onLoginChange(response.data.role, 'true');
+                    window.location.href = "http://localhost:3000/"
+                
             }
 		})
 		.catch(function (error) {
 			let message = "Sign in failed!";
-            if (!error.response) message = error.response.data.message;
-            else {
-                message = error.response.data.message;
+            if (error.response) {
+                message = error.response.data.errors.username +"\n"+error.response.data.errors.password;
 			}
+            else message = "Connection failed ! Please try again later";
 			alert(message);	
 		});
+    }
+    function getInformation(){
+        getwithAuthtication("/accounts/"+JSON.parse(localStorage.getItem('user')).id)
+        .then(function(response){
+            localStorage.setItem('information', JSON.stringify(response.data));
+        })
+        .catch( function(error){
+            let message = "Connection failed !"
+            if (error.response) {
+                message = error.response.data.message;
+			}
+            else message = "Connection failed ! Please try again later";
+			alert(message);	
+        })
+    }
+    const handleRegister = (e) => {
+        if(password !== confirm){
+            alert("Confirm Password is not correct");
+        } 
     }
     return (
         <section class="login-register-area">
@@ -64,36 +87,19 @@ export default function Login(props){
                     </div>
                     <div class="login-register-style login-register-pr">
                         <form onSubmit={handleLogin}>
-                        {/* <FormGroup className="position-relative">
-                            
-                            <Input valid />
-                            <FormFeedback
-                            tooltip
-                            valid
-                            >
-                            Sweet! that name is available
-                            </FormFeedback>
-                            <FormText>
-                            Example help text that remains unchanged.
-                            </FormText>
-                        </FormGroup>
-                        <FormGroup className="position-relative">
-                            
-                            <Input invalid />
-                            <FormFeedback tooltip>
-                            Oh noes! that name is already taken
-                            </FormFeedback>
-                            <FormText>
-                            Example help text that remains unchanged.
-                            </FormText>
-                        </FormGroup> */}
                         <div class="login-register-input">
-                            <input type="text" defaultValue={account.username} name="user-name" placeholder="Username"
-                            onChange={handleUsername}/>
+                            <input type="text"  name="user-name" placeholder="Username"
+                            onChange={(e)=> {
+                                account.username = e.target.value
+                                setAccount(account)
+                            }}/>
                         </div>
                         <div class="login-register-input">
-                            <input type="password" defaultValue={account.password} name="user-password" placeholder="Password"
-                            onChange={handlePassword}/>
+                            <input type="password"  name="user-password" placeholder="Password"
+                            onChange={(e) => {
+                                account.password = e.target.value
+                                setAccount(account)
+                            }}/>
                             
                         </div>
                         <div class="btn-style-3">
@@ -110,21 +116,51 @@ export default function Login(props){
                         <p>Create new account today to reap the benefits of a personalized shopping experience. </p>
                     </div>
                     <div class="login-register-style">
-                        <form action="#" method="post">
+                        <form onSubmit={handleRegister}>
+                        
                         <div class="login-register-input">
-                            <input type="text" name="user-name" placeholder="Username"/>
+                            <input type="text" name="user-name" placeholder="Full Name" onChange={(e) => {
+                                register.name = e.target.value;
+                                setRegister(register)
+                            }}/>
                         </div>
                         <div class="login-register-input">
-                            <input type="text" name="user-name" placeholder="E-mail address"/>
+                            <input type="text" name="user-name" placeholder="User Name" onChange={(e) => {
+                                register.userName = e.target.value;
+                                setRegister(register)
+                            }}/>
                         </div>
                         <div class="login-register-input">
-                            <input type="password" name="user-password" placeholder="Password"/>
+                            <input type="text" name="user-name" placeholder="Phone Number" onChange={(e) => {
+                                register.phoneNumber = e.target.value;
+                                setRegister(register)
+                            }}/>
                         </div>
+                        <div class="login-register-input">
+                            <input type="text" name="user-name" placeholder="E-mail Address" onChange={(e) => {
+                                register.email = e.target.value;
+                                setRegister(register)
+                            }}/>
+                        </div>
+                        
+                        <div class="login-register-input">
+                            <input type="text" name="user-name" placeholder="Address" onChange={(e) => {
+                                register.address = e.target.value;
+                                setRegister(register)
+                            }}/>
+                        </div>
+                        <div class="login-register-input">
+                            <input type="password" name="user-password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+                        </div>
+                        <div class="login-register-input">
+                            <input type="password" name="user-password" placeholder="Confirm Password" onChange={(e) => setConfirm(e.target.value)}/>
+                        </div>
+                        
                         <div class="login-register-paragraph">
-                            <p>Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our <a href="#">privacy policy.</a></p>
+                            <p>Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our privacy policy.</p>
                         </div>
                         <div class="btn-style-3">
-                            <button class="btn" onclick="window.location.href='my-account.html'" type="button">Register</button>
+                            <button class="btn"  type="submit">Register</button>
                         </div>
                         </form>
                         

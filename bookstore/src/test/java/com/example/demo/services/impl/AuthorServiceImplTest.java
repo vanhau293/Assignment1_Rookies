@@ -31,16 +31,15 @@ public class AuthorServiceImplTest {
 	@BeforeEach
 	void beforeEach() {
 		authorRepository = mock(AuthorRepository.class);
-		modelMapper = mock(ModelMapper.class);
+		modelMapper = new ModelMapper();
 		authorServiceImpl = new AuthorServiceImpl(authorRepository,modelMapper);
-		initialAuthor = mock(AuthorDto.class);
-		authorEntity = mock(AuthorEntity.class);
+		initialAuthor = new AuthorDto("1","Nguyen");
+		authorEntity = new AuthorEntity("Hau");
 		
 		when(authorRepository.save(authorEntity)).thenReturn(authorEntity);
-		when(modelMapper.map(initialAuthor,AuthorEntity.class)).thenReturn(authorEntity);
+		//when(modelMapper.map(initialAuthor,AuthorEntity.class)).thenReturn(authorEntity);
 		
 	}
-	@SuppressWarnings("unchecked")
 	@Test
 	void getAuthors_ShouldReturnList_WhenDataValid() {
 		List<AuthorEntity> list = new ArrayList<AuthorEntity>();
@@ -57,7 +56,7 @@ public class AuthorServiceImplTest {
 	}
 	@Test
 	void addAuthor_ShouldReturnStatus400_WhenAuthorNameAlrealyExist() {
-		when(authorRepository.findByAuthorName(initialAuthor.getAuthorName())).thenReturn(Optional.of(authorEntity));
+		when(authorRepository.findByAuthorName("Nguyen")).thenReturn(Optional.of(authorEntity));
 		ResponseEntity<?> result = authorServiceImpl.addAuthor(initialAuthor);
 //		verify(authorRepository).findByAuthorName(initialAuthor.getAuthorName()); // verify hàm đã đc gọi hay chưa
 		assertThat(result.getStatusCode(), is(HttpStatus.BAD_REQUEST));

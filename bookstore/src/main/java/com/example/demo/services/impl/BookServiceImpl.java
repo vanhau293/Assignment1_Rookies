@@ -1,6 +1,7 @@
 package com.example.demo.services.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import com.example.demo.data.entities.AuthorEntity;
 import com.example.demo.data.entities.BookEntity;
 import com.example.demo.data.entities.CategoryEntity;
 import com.example.demo.data.entities.CustomerEntity;
+import com.example.demo.data.entities.OrderDetailEntity;
 import com.example.demo.data.entities.ReviewEntity;
 import com.example.demo.repositories.AuthorRepository;
 import com.example.demo.repositories.BookRepository;
@@ -152,7 +154,22 @@ public class BookServiceImpl implements BookService{
 		if(!optionalCustomer.isPresent()) {
 			return ResponseEntity.badRequest().body(new MessageResponse("CustomerId of ReviewPK not found"));
 		}
+		Optional<ReviewEntity> optionalReview = reviewRepository.findById(dto.getReviewPK());
+		if(optionalReview.isPresent()) {
+			return ResponseEntity.badRequest().body(new MessageResponse("You have already reviewed this book.\n Each person can only rate each book once"));
+		}
+		BookEntity book = optionalBook.get();
+		boolean t = false; // kiểm tra customer đó đã mua sách này chưa
+		for(OrderDetailEntity o : book.getOrderDetailsCollection()){
+			if(o.getOrderEntity().getCustomerId().getCustomerId()==dto.getReviewPK().getCustomerId()) {
+				t= true;
+				break;
+			}
+		}
+		if(t==false) 
+			return ResponseEntity.badRequest().body(new MessageResponse("You have not purchased this book, so you cannot review it"));
 		ReviewEntity review = modelMapper.map(dto, ReviewEntity.class);
+		review.setCreatedDate(new Date());
 		review = reviewRepository.save(review);
 		return ResponseEntity.ok(review);
 	}

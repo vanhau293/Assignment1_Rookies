@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 
 import './App.css';
 import Home from './components/home';
@@ -19,25 +19,28 @@ import ManageCategories from "./components/admin/manage-categories";
 
 
 function App() {
-  const [role, setRole] = useState('Customer');
-  const [isLogin, setIsLogin] = useState(false);
-  useEffect(()=>{
-    console.log("aa");
-  },[]);
+  const [role, setRole] = useState(localStorage.getItem('role'));
+  const [isLogin, setIsLogin] = useState(localStorage.getItem('isLogin'));
+  
   function handleLoginChange(role, isLogin){
-    console.log(isLogin);
     setRole(role);
     setIsLogin(isLogin);
   }
+  useEffect(()=>{
+    if(localStorage.getItem('role') === null) setRole('Customer');
+    if(localStorage.getItem('isLogin') === null) setIsLogin('false');
+  },[])
     return (
+      <>
+      
       <BrowserRouter>
         <Header isLogin = {isLogin} role = {role} onLoginChange = {handleLoginChange}/>
         <Routes >
           
-          <Route path="/"element = {<Home cloudName = "duku7fuxt" />} />
+          <Route path="/"element = {<Home />} />
           <Route path='/books' element= {<Books />} />
           <Route path="/login-register" element= {<Login onLoginChange = {handleLoginChange}/>} />
-          <Route path="/books/:id" element= {<SingleBook />} />
+          <Route path='/books/:id' element= {<SingleBook />} />
           <Route path="/my-account" element= {<MyAccount />} />
           <Route path="/cart" element= {<Cart />} />
           <Route path="/checkout" element= {<Checkout />} />
@@ -51,6 +54,7 @@ function App() {
                      
         </Routes>
       </BrowserRouter>
+      </>
     );
   
   

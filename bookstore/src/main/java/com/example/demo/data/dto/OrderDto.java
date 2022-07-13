@@ -1,6 +1,5 @@
 package com.example.demo.data.dto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.constraints.Min;
@@ -9,25 +8,23 @@ import javax.validation.constraints.Pattern;
 
 public class OrderDto {
 	@Pattern(regexp = "\\d*", message = "OrderId must be a number")
-	private Integer orderId;
+	private String orderId;
 	public StatusDto statusId;
-	@NotEmpty(message = "UpdateDate must not be empty")
-	//2022-06-28T12:25:32.020
-	@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d*", 
-	message = "Updated date must be a day like (yyyy-MM-ddTHH:mm:ss.SSS)")
-	private String updateDate;
-	@NotEmpty(message = "Total cash must not be empty")
+	public String updateDate;
 	@Min(value = 0, message = "Total cash >= 0")
 	@Pattern(regexp = "\\d*", message = "Total cash must be a number")
-	private String totalCash;
+	public String totalCash;
+	@NotEmpty(message = "CustomerId must not be empty")
 	private CustomerForeignDto customerId;
 	private EmployeeForeignDto employeeId;
 	private List<OrderDetailsDto> orderDetails;
+	@NotEmpty(message = "list Cart must not be empty")
+	private List<CartDto> listCart;
 	
-	public Integer getOrderId() {
+	public String getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(Integer orderId) {
+	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
 	public CustomerForeignDto getCustomerId() {
@@ -45,16 +42,8 @@ public class OrderDto {
 	public void setOrderDetails(List<OrderDetailsDto> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
-	public LocalDateTime getUpdateDate(){
-
-		return LocalDateTime.parse(updateDate);
-	
-	}
 	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
-	}
-	public String getTotalCash() {
-		return totalCash;
 	}
 	public void setTotalCash(String totalCash) {
 		this.totalCash = totalCash;
@@ -67,6 +56,12 @@ public class OrderDto {
 	}
 	public void setStatusId(StatusDto statusId) {
 		this.statusId = statusId;
+	}
+	public List<CartDto> getListCart() {
+		return listCart;
+	}
+	public void setListCart(List<CartDto> listCart) {
+		this.listCart = listCart;
 	}
 	
 	

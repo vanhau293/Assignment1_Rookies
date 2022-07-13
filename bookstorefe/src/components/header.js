@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { Input } from "reactstrap";
 import { useEffect, useState } from 'react';
 import { get } from "../callApi";
-
 export default function Header(props){
 	const [categories, setCategories] = useState([]);
+	const [role, setRole] = useState(props.role);
+	const [isLogin, setIsLogin] = useState(props.isLogin);
 	let buttonAcc;
 	const listItems = (
 		<ul class="submenu-nav">
@@ -19,11 +20,12 @@ export default function Header(props){
 	const handleLogout = (e) =>{
 		localStorage.removeItem('user');
 		localStorage.removeItem('token');
+		localStorage.removeItem('information');
 		localStorage.setItem('isLogin', 'false');
 		localStorage.setItem('role', 'Customer');
 		props.onLoginChange('Customer', false);
 	}
-	if(props.isLogin=== true){
+	if(isLogin === 'true'){
 		buttonAcc = <a href="/" onClick={handleLogout}><i class="fa fa-user" ></i> Logout</a>
 	} 
 	else{
@@ -31,20 +33,18 @@ export default function Header(props){
 		buttonAcc = <Link to="/login-register"><i class="fa fa-user"></i> Login-Register</Link>
 	}
 	let toolbar;
-	if(props.role === 'Customer'){
+	if(role === 'Customer'){
 		
-		console.log(props.role);
 		toolbar = (
 			<ul class="main-menu nav position-relative">
-				<li ><Link class="ml--2" to="/">Home</Link></li>
-				<li class="has-submenu"><Link to="/books">Categories</Link>
-					{listItems}
+				<li ><a class="ml--2" href="/">Home</a></li>
+				<li class="ml--2"><Link to="/books">Books</Link>
+					
 				</li>
 			</ul>
 		);
 	}
 	else{
-		console.log(props.role);
 		toolbar = (
 			<ul class="main-menu nav position-relative">
 				<li ><Link class="ml--2" to="/manage/orders">Orders</Link></li>
@@ -66,9 +66,13 @@ export default function Header(props){
 		})
 		.catch(function (error) {
 			let message = "Can't get list Category !";
-            alert(message);	
+            if (error.response) {
+                message = error.response.data.message;
+			}
+            //else message = "Connection failed ! Please try again later";
+			alert(message);	
 		});
-  }
+    }
 	
   
   useEffect( () => {

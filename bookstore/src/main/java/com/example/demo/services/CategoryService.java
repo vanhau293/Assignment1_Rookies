@@ -12,4 +12,5 @@ public interface CategoryService {
 	public CategoryDto addCategory(CategoryDto dto);
 	public CategoryDto updateCategory(Integer id, CategoryDto dto);
 	public ResponseEntity<?> deleteCategory(Integer id);
+	public ResponseEntity<?> getBooksByCategoryId(Integer id);
 }

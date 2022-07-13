@@ -31,7 +31,10 @@ public class CategoryController {
 		if(isDeleted == false) return categoryService.getAllCategories();
 		else return categoryService.getCategoriesDeleted();
 	}
-	
+	@GetMapping("/{id}/books")
+	public ResponseEntity<?> getBooksByCategoryId(@PathVariable("id") Integer categoryId){
+		return categoryService.getBooksByCategoryId(categoryId);
+	}
 	@PostMapping("")
 	public CategoryDto addCategory(@Valid @RequestBody CategoryDto dto) {
 		return categoryService.addCategory(dto);

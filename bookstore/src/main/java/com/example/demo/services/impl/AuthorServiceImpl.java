@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.data.dto.AuthorDto;
+import com.example.demo.data.dto.BookDto;
 import com.example.demo.data.entities.AuthorEntity;
-
-
+import com.example.demo.data.entities.BookEntity;
 import com.example.demo.repositories.AuthorRepository;
 import com.example.demo.response.MessageResponse;
 import com.example.demo.exceptions.ResourceNotFoundException;
@@ -35,6 +35,9 @@ public class AuthorServiceImpl implements AuthorService{
 	public ResponseEntity<?> getAllAuthors() {
 		// TODO Auto-generated method stub
 		List<AuthorEntity> list = authorRepository.findAll();
+		if(list.size()==0) {
+			return ResponseEntity.ok(new MessageResponse("There are no Authors"));
+		}
 		List<AuthorDto> listDto = new ArrayList<AuthorDto>();
 		list.forEach(p -> listDto.add(modelMapper.map(p, AuthorDto.class)));
 		return ResponseEntity.ok(listDto);
@@ -62,6 +65,25 @@ public class AuthorServiceImpl implements AuthorService{
 			return ResponseEntity.ok(new MessageResponse("Update author successfully"));
 		}
 		throw new ResourceNotFoundException("Author not found");
+	}
+
+	@Override
+	public ResponseEntity<?> getBooksByAuthorId(Integer authorId) {
+		// TODO Auto-generated method stub
+		Optional<AuthorEntity> optional = authorRepository.findById(authorId);
+		if(!optional.isPresent()) {
+			throw new ResourceNotFoundException("Author not found");
+		}
+		AuthorEntity author = optional.get();
+		List<BookEntity> list = (List<BookEntity>) author.getBooksCollection();
+		if(list.size()==0) {
+			return ResponseEntity.badRequest().body(new MessageResponse("There are no books in this author"));
+		}
+		List<BookDto> listDto = new ArrayList<BookDto>();
+		list.forEach(b -> {
+			if(b.isInStock()) listDto.add(modelMapper.map(b, BookDto.class));
+		});
+		return ResponseEntity.ok(listDto);
 	}
 	
 
